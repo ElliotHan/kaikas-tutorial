@@ -1,0 +1,23 @@
+.SmartContractExecution {
+  .Input { margin-bottom: 10px; }
+
+  h2 {
+    margin-bottom: 20px;
+    color: $dark-brown;
+  }
+
+  h3 {
+    padding: 20px 0 20px;
+    border-top: 1px solid $light-grey;
+    margin-top: 25px;
+  }
+
+  .SmartContractExecution__guide {
+    color: $brown-grey;
+    margin-bottom: 20px;
+    a {
+      color: $main-theme-blue;
+      text-decoration: underline;
+    }
+  }
+}

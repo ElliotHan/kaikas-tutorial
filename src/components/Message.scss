@@ -1,0 +1,73 @@
+.Message {
+  @include font-style('font-4');
+  word-break: break-all;
+  padding: 10px 24px;
+  overflow: scroll;
+  background-color: $main-theme-deep-black;
+  padding: 10px;
+  padding-left: 0;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 20px;
+  
+  &--error {
+    .Message__status {
+      vertical-align: middle;
+      padding-top: 20px;
+      color: $error-red;
+      background-image: url('/images/ico-error.svg');
+      background-repeat: no-repeat;
+      background-position: top center;
+    }
+    .Message__message {
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 14px;
+      color: $error-red;
+          width: calc(100% - 80px);
+    }
+  }
+  &--txHash {
+    .Message__status {
+      vertical-align: middle;
+      padding-top: 0;
+      color: $warning-yellow;
+      background: none;
+    }
+    .Message__message {
+      color: $warning-yellow;
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 14px;
+      color: white;
+          width: calc(100% - 80px);
+    }
+  }
+  &--receipt {
+    .Message__status {
+      vertical-align: top;
+      margin-top: 5px;
+      padding-top: 20px;
+      color: white;
+      background-image: url('/images/ico-receipt.svg');
+      background-repeat: no-repeat;
+      background-position: top center;
+    }
+    .Message__message {
+      width: calc(100% - 80px);
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 14px;
+      color: white;
+    }
+  }
+}
+
+.Message__status {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  font-weight: bold;
+}
+
+
