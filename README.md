@@ -1,8 +1,17 @@
 # kaikas-tutorial
 
-- 담당 엔지니어: 김보영(bong)
-- 담당 PM: Euiyoul (Brian) Kim
+```
+- Engineer: 김보영(bong)
+- PM: Euiyoul (Brian) Kim
 - Support: Junsic "Chofa" Youn
+```
+
+## install
+```
+$ git clone https://github.com/ground-x/kaikas-tutorial.git
+$ npm install
+$ npm run local
+```
 
 ## Objective
 Kaikas deliverable이 PixelPlex로부터 도착했을 때 정상적으로 동작하는지 GX에서 검증 가능한 BApp 개발
