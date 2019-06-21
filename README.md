@@ -1,8 +1,10 @@
 # kaikas-tutorial
 
-- 담당 엔지니어: 김보영(bong)
-- 담당 PM: Euiyoul (Brian) Kim
+```
+- Engineer: 김보영(bong)
+- PM: Euiyoul (Brian) Kim
 - Support: Junsic "Chofa" Youn
+```
 
 ## Objective
 Kaikas deliverable이 PixelPlex로부터 도착했을 때 정상적으로 동작하는지 GX에서 검증 가능한 BApp 개발
@@ -14,6 +16,13 @@ Kaikas deliverable이 PixelPlex로부터 도착했을 때 정상적으로 동작
 - Metamask를 사용하여 개발하던 개발자들이 같은 방식으로 추가적인 학습 없이 Kaikas로 개발 가능하다고 전제해야함
 - Kaikas를 provider로 이용해서 BApp이 기능을 수행할 수 있는지까지만 검증하면 됨
 - 성공/실패만 반환 - 추가적인 검증을 위해 자세한 데이터를 보고 싶다면 Klaytnscope 사용
+
+## install
+```
+$ git clone https://github.com/ground-x/kaikas-tutorial.git
+$ npm install
+$ npm run local
+```
 
 ## 상세기획 및 진행상황
 https://groundx.atlassian.net/wiki/spaces/TEC/pages/edit/294519330?draftId=294453784&draftShareId=d67961b3-edec-486a-bee9-f1ae133da1e3&
