@@ -3,6 +3,7 @@ import Web3 from 'web3'
 
 import Input from 'components/Input'
 import Button from 'components/Button'
+import TxResult from 'components/TxResult'
 
 import './ValueTransfer.scss'
 
@@ -13,6 +14,9 @@ class ValueTransfer extends Component {
       from: props.from,
       to: '',
       value: '',
+      txHash: null,
+      receipt: null,
+      error: null,
     }
   }
 
@@ -37,13 +41,23 @@ class ValueTransfer extends Component {
       from,
       to,
       value: web3.utils.toWei(value.toString(), 'ether'),
-    }).on('transactionHash', (transactionHash) => console.log('txHash', transactionHash))
-      .on('receipt', (receipt) => console.log('receipt', receipt))
-      .on('error', (error) => console.log('error', error))
+    })
+      .once('transactionHash', (transactionHash) => {
+        console.log('txHash', transactionHash)
+        this.setState({ txHash: transactionHash })
+      })
+      .once('receipt', (receipt) => {
+        console.log('receipt', receipt)
+        this.setState({ receipt: JSON.stringify(receipt) })
+      })
+      .once('error', (error) => {
+        console.log('error', error)
+        this.setState({ error: error.message })
+      })
   }
 
   render() {
-    const { from, to, value } = this.state
+    const { from, to, value, txHash, receipt, error } = this.state
     return (
       <div className="ValueTransfer">
         <h2>Value Transfer</h2>
@@ -72,6 +86,11 @@ class ValueTransfer extends Component {
         <Button
           title="Value Transfer"
           onClick={this.handleValueTransfer}
+        />
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
         />
       </div>
     )

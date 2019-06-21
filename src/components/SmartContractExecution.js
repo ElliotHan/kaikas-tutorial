@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
+
 import Input from 'components/Input'
 import Button from 'components/Button'
-import Message from 'components/Message'
+import TxResult from 'components/TxResult'
 
 import './SmartContractExecution.scss'
 
@@ -11,10 +12,9 @@ class SmartContractExecution extends Component {
     super(props)
     this.state = {
       from: props.from,
-      abi: '',
-      contractAddress: '',
       to: '',
       amount: '',
+      contractAddress: '',
       txHash: null,
       receipt: null,
       error: null,
@@ -35,23 +35,8 @@ class SmartContractExecution extends Component {
   }
 
   handleSmartContractExecution = () => {
-    const { from, contractAddress, to, amount, abi } = this.state
+    const { from, contractAddress, to, amount } = this.state
     const web3 = new Web3(ethereum)
-    // const myContract = new web3.eth.Contract(JSON.parse(abi), contractAddress)
-    // window.myContract = myContract
-    // myContract.methods.transfer(to, web3.utils.toWei(amount, 'ether')).send({ from: this.props.from })
-    //   .once('transactionHash', (transactionHash) => {
-    //     console.log('txHash', transactionHash)
-    //     this.setState({ txHash: transactionHash })
-    //   })
-    //   .once('receipt', (receipt) => {
-    //     console.log('receipt', receipt)
-    //     this.setState({ receipt: JSON.stringify(receipt) })
-    //   })
-    //   .once('error', (error) => {
-    //     console.log('error', error)
-    //     this.setState({ error: error.message })
-    //   })
     const data = web3.eth.abi.encodeFunctionCall({
       name: 'transfer',
       type: 'function',
@@ -83,16 +68,16 @@ class SmartContractExecution extends Component {
       })
   }
 
-  callContractFunction = () => {
+  /* callContractFunction = () => {
     const { method } = this.state
     const getData = myContract[method].getData();
     web3.eth.call({ to: Contractaddress, data: getData }, (err, result) => {
       console.log(err, result)
     })
-  }
+  } */
 
   render() {
-    const { from, abi, contractAddress, to, amount, txHash, receipt, error } = this.state
+    const { from, to, amount, contractAddress, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractExecution">
         <h2>Token Transfer</h2>
@@ -132,27 +117,11 @@ class SmartContractExecution extends Component {
           title="Contract Execute"
           onClick={this.handleSmartContractExecution}
         />
-        <div className="SmartContractDeploy__txResult">
-          <h3 className="SmartContractDeploy__txResultTitle">Transaction Result</h3>
-          {error && (
-            <Message
-              message={error}
-              type="error"
-            />
-          )}
-          {txHash && (
-            <Message
-              message={txHash}
-              type="txHash"
-            />
-          )}
-          {receipt && (
-            <Message
-              message={receipt}
-              type="receipt"
-            />
-          )}
-        </div>
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

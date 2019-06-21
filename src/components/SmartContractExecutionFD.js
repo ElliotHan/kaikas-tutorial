@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import caver from 'klaytn/caver'
+
 import Input from 'components/Input'
 import Button from 'components/Button'
-import Message from 'components/Message'
+import TxResult from 'components/TxResult'
 
 import './SmartContractExecution.scss'
 
 class SmartContractExecutionFD extends Component {
   state = {
-    abi: '',
-    contractAddress: '',
     from: '',
     senderPrivateKey: '',
     to: '',
     amount: '',
+    contractAddress: '',
     feePayerAddress: '0x80Fa56B456E2dF8A2D069Ead6F7C975e2685c87a',
     feePayerPrivateKey: '0x7a9e8024d21e60f17bc095ac7e5d35384c2c9bc1eb07f407f43652736327037e',
     txHash: null,
@@ -28,7 +28,7 @@ class SmartContractExecutionFD extends Component {
   }
 
   handleSmartContractExecution = async () => {
-    const { contractAddress, from, senderPrivateKey, to, amount, feePayerAddress, feePayerPrivateKey } = this.state
+    const { from, senderPrivateKey, to, amount, contractAddress, feePayerAddress, feePayerPrivateKey } = this.state
 
     const data = caver.klay.abi.encodeFunctionCall({
       name: 'transfer',
@@ -71,8 +71,7 @@ class SmartContractExecutionFD extends Component {
   }
 
   render() {
-    const { from, senderPrivateKey, feePayerAddress, feePayerPrivateKey, abi, contractAddress, to, amount, txHash, receipt, error } = this.state
-    window.caver = caver
+    const { from, senderPrivateKey, to, amount, contractAddress, feePayerAddress, feePayerPrivateKey, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractExecution">
         <h2>Token Transfer (Fee Delegation)</h2>
@@ -136,27 +135,11 @@ class SmartContractExecutionFD extends Component {
           title="Token Transfer (Fee Delegation)"
           onClick={this.handleSmartContractExecution}
         />
-        <div className="SmartContractDeploy__txResult">
-          <h3 className="SmartContractDeploy__txResultTitle">Transaction Result</h3>
-          {error && (
-            <Message
-              message={error}
-              type="error"
-            />
-          )}
-          {txHash && (
-            <Message
-              message={txHash}
-              type="txHash"
-            />
-          )}
-          {receipt && (
-            <Message
-              message={receipt}
-              type="receipt"
-            />
-          )}
-        </div>
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

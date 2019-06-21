@@ -28,7 +28,8 @@ class KaikasPage extends Component {
     this.web3 = null
     this.state = {
       txType: null,
-      account: '',
+      account: 'Login with Kaikas :)',
+      balance: 0,
     }
     this.loadAccountInfo()
   }
@@ -43,14 +44,13 @@ class KaikasPage extends Component {
   }
 
   loadAccountInfo = async () => {
+    const { ethereum } = window
+
     // 1. Modern dapp browsers...
-    if (window.ethereum) {
-      const { ethereum } = window
+    if (ethereum) {
       this.web3 = new Web3(ethereum)
-      window.Web3 = Web3
       try {
         await ethereum.enable()
-        // Acccounts now exposed
         this.setAccountInfo(ethereum)
         ethereum.on('accountsChanged', () => this.setAccountInfo(ethereum))
       } catch (error) {
@@ -60,7 +60,6 @@ class KaikasPage extends Component {
     // 2. Legacy dapp browsers...
     else if (window.web3) {
       this.web3 = new Web3(window.web3.currentProvider)
-      // Acccounts always exposed
       this.setAccountInfo(this.web3)
     }
     // 3. Non-dapp browsers...
@@ -71,7 +70,7 @@ class KaikasPage extends Component {
 
   selectTxType = (txType) => this.setState({ txType })
 
-  renderExample = (txType, from) => {
+  renderTxExample = (txType, from) => {
     switch (txType) {
       case 'Add Token':
         return <AddToken />
@@ -86,7 +85,7 @@ class KaikasPage extends Component {
       case 'Token Transfer (Fee Delegation)':
         return <SmartContractExecutionFD />
       default:
-        return 'Select Transaction Example'
+        return 'Select Transaction Example :)'
     }
   }
 
@@ -94,10 +93,10 @@ class KaikasPage extends Component {
     const { account, balance, txType } = this.state
     return (
       <div className="KaikasPage">
-        <Nav address={account} balance={balance} />
+        <Nav />
         <div className="KaikasPage__main">
           <WalletInfo address={account} balance={balance} />
-          <div className="KaikasPage__txExampleBox">
+          <div className="KaikasPage__content">
             <Dropdown
               className="KaikasPage__dropdown"
               placeholder="Select Transaction type"
@@ -107,8 +106,8 @@ class KaikasPage extends Component {
             />
             <div className="KaikasPage__txExample">
               {txType
-                ? this.renderExample(txType, account)
-                : <p className="KaikasPage__selectExample">Select Transaction Example :)</p>
+                ? this.renderTxExample(txType, account)
+                : <p className="KaikasPage__guide">Select Transaction Example :)</p>
               }
             </div>
           </div>

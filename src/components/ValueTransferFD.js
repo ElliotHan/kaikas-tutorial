@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
-import Message from 'components/Message'
+import TxResult from 'components/TxResult'
 import './ValueTransfer.scss'
 
 class ValueTransferFD extends Component {
@@ -56,7 +56,17 @@ class ValueTransferFD extends Component {
   }
 
   render() {
-    const { from, senderPrivateKey, to, value, feePayerAddress, feePayerPrivateKey, txHash, receipt, error } = this.state
+    const {
+      from,
+      senderPrivateKey,
+      to,
+      value,
+      feePayerAddress,
+      feePayerPrivateKey,
+      txHash,
+      receipt,
+      error,
+    } = this.state
     return (
       <div className="ValueTransfer">
         <h2>Value Transfer (Fee Delegation)</h2>
@@ -113,27 +123,11 @@ class ValueTransferFD extends Component {
           title="Value Transfer (Fee Delegation)"
           onClick={this.handleValueTransferFD}
         />
-        <div className="SmartContractDeploy__txResult">
-          <h3 className="SmartContractDeploy__txResultTitle">Transaction Result</h3>
-          {error && (
-            <Message
-              message={error}
-              type="error"
-            />
-          )}
-          {txHash && (
-            <Message
-              message={txHash}
-              type="txHash"
-            />
-          )}
-          {receipt && (
-            <Message
-              message={receipt}
-              type="receipt"
-            />
-          )}
-        </div>
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

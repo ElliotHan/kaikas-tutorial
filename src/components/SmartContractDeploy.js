@@ -3,7 +3,7 @@ import Web3 from 'web3'
 
 import Input from 'components/Input'
 import Button from 'components/Button'
-import Message from 'components/Message'
+import TxResult from 'components/TxResult'
 
 import './SmartContractDeploy.scss'
 
@@ -39,15 +39,16 @@ class SmartContractDeploy extends Component {
     web3.eth.sendTransaction({
       from,
       data,
-    }).on('transactionHash', (transactionHash) => {
-      console.log('txHash', transactionHash)
-      this.setState({ txHash: transactionHash })
     })
-      .on('receipt', (receipt) => {
+      .once('transactionHash', (transactionHash) => {
+        console.log('txHash', transactionHash)
+        this.setState({ txHash: transactionHash })
+      })
+      .once('receipt', (receipt) => {
         console.log('receipt', receipt)
         this.setState({ receipt: JSON.stringify(receipt) })
       })
-      .on('error', (error) => {
+      .once('error', (error) => {
         console.log('error', error)
         this.setState({ error: error.message })
       })
@@ -80,27 +81,11 @@ class SmartContractDeploy extends Component {
           title="Deploy Contract"
           onClick={this.handleSmartContractDeploy}
         />
-        <div className="SmartContractDeploy__txResult">
-          <h3 className="SmartContractDeploy__txResultTitle">Transaction Result</h3>
-          {error && (
-            <Message
-              message={error}
-              type="error"
-            />
-          )}
-          {txHash && (
-            <Message
-              message={txHash}
-              type="txHash"
-            />
-          )}
-          {receipt && (
-            <Message
-              message={receipt}
-              type="receipt"
-            />
-          )}
-        </div>
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

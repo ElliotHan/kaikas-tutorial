@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import Input from 'components/Input'
 import Button from 'components/Button'
 
@@ -37,7 +36,6 @@ class AddToken extends Component {
   }
 
   addExampleToken = () => {
-    console.log('add Example?')
     this.setState({
       tokenAddress: '0x617b3f8050a0bd94b6b1da02b4384ee5b4df13f4',
       tokenSymbol: 'MARK',

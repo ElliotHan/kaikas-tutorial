@@ -23,20 +23,33 @@
   padding: 12px 18px;
 
   &:first-child {
-    width: 55%;
+    width: 60%;
     border-right: 1px solid $light-grey;
   }
   &:nth-child(2) {
-    width: 45%;
+    width: 40%;
   }
+}
 
-  span {
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-    color: $brown-grey;
-    margin-bottom: 3px;
-  }
+.WalletInfo__label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: $brown-grey;
+  margin-bottom: 3px;
+}
+
+.WalletInfo__balance {
+  @include textEllipsis();
+  display: inline-block;
+  max-width: calc(100% - 34px);
+  vertical-align: bottom;
+}
+
+.WalletInfo__unit {
+  display: inline-block;
+  width: 34px;
+  text-align: right;
 }
 
 .WalletInfo__faucet {
