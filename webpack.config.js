@@ -6,9 +6,6 @@ const Dotenv = require('dotenv-webpack')
 const { HotModuleReplacementPlugin } = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
-require('babel-polyfill')
 
 const extractCSS = new ExtractTextPlugin('bundle-[hash:6].css')
 
@@ -25,7 +22,6 @@ module.exports = {
   devtool: 'source-map',
   mode: 'development',
   entry: [
-    'babel-polyfill',
     'react-hot-loader/patch',
     path.resolve(__dirname, 'src/index.js'),
     'webpack-hot-middleware/client',
@@ -63,10 +59,6 @@ module.exports = {
           ],
         }),
       },
-      {
-        test: /\.md$/,
-        use: 'raw-loader',
-      },
     ],
   },
   resolve: {
@@ -79,11 +71,9 @@ module.exports = {
       components: path.resolve(__dirname, 'src/components/'),
       pages: path.resolve(__dirname, 'src/pages/'),
       utils: path.resolve(__dirname, 'src/utils/'),
-      contracts: path.resolve(__dirname, 'contracts'),
       klaytn: path.resolve(__dirname, 'src/klaytn/'),
       images: path.resolve(__dirname, 'static/images/'),
       actions: path.resolve(__dirname, 'redux/actions/'),
-      tutorialData: path.resolve(__dirname, 'static/tutorialData/'),
     },
   },
   plugins: [
@@ -92,7 +82,6 @@ module.exports = {
       inject: 'body',
     }),
     extractCSS,
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new Dotenv({

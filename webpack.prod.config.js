@@ -9,9 +9,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
-// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-
-require('babel-polyfill')
 
 const extractCSS = new ExtractTextPlugin('bundle-[hash:6].css')
 
@@ -28,7 +25,6 @@ module.exports = {
   devtool: 'source-map',
   mode: 'production',
   entry: [
-    'babel-polyfill',
     path.resolve(__dirname, 'src/index.js'),
   ],
   output: {
@@ -80,10 +76,8 @@ module.exports = {
       constants: path.resolve(__dirname, 'src/constants/'),
       components: path.resolve(__dirname, 'src/components/'),
       utils: path.resolve(__dirname, 'src/utils/'),
-      contracts: path.resolve(__dirname, 'contracts'),
       klaytn: path.resolve(__dirname, 'src/klaytn/'),
       images: path.resolve(__dirname, 'static/images/'),
-      tutorialData: path.resolve(__dirname, 'static/tutorialData/'),
     },
   },
   optimization: {
@@ -100,7 +94,6 @@ module.exports = {
       inject: 'body',
     }),
     extractCSS,
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.NoEmitOnErrorsPlugin(),
     new CompressionPlugin(),
     new CopyWebpackPlugin([{
@@ -111,6 +104,5 @@ module.exports = {
     new Dotenv({
       path: envPath,
     }),
-    // new MonacoWebpackPlugin(),
   ],
 }
