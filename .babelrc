@@ -1,18 +1,11 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "browsers": ["last 2 versions", "> 10%", "ie 9"],
-        "modules": false
+  "presets": [["@babel/preset-env",
+    {
+      "targets": {
+        "ie": 10,
       }
-    ],
-    "react",
-    "es2015",
-    "stage-0"
-  ],
+    }], "@babel/preset-react"],
   "plugins": [
-    "react-hot-loader/babel",
-    "syntax-dynamic-import"
+    "@babel/plugin-proposal-class-properties",
   ]
 }
