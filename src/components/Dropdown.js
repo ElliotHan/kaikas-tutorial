@@ -3,7 +3,7 @@ import cx from 'classnames'
 
 import './Dropdown.scss'
 
-class Dropdown extends Component<Props> {
+class Dropdown extends Component {
   constructor(props) {
     super(props);
     this.setWrapperRef = this.setWrapperRef.bind(this);
