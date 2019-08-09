@@ -71,4 +71,9 @@
   font-weight: bold;
 }
 
+.Message__message {
+  display: inline-block;
+  width: calc(100% - 80px);
+  vertical-align: middle;
+}
 
