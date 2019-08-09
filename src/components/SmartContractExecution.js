@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Web3 from 'web3'
+import Caver from 'caver-js'
 
 import Input from 'components/Input'
 import Button from 'components/Button'
@@ -15,6 +15,7 @@ class SmartContractExecution extends Component {
       to: '',
       amount: '',
       contractAddress: '',
+      gas: '',
       txHash: null,
       receipt: null,
       error: null,
@@ -35,9 +36,9 @@ class SmartContractExecution extends Component {
   }
 
   handleSmartContractExecution = () => {
-    const { from, contractAddress, to, amount } = this.state
-    const web3 = new Web3(ethereum)
-    const data = web3.eth.abi.encodeFunctionCall({
+    const { from, contractAddress, to, amount, gas } = this.state
+    const caver = new Caver(klaytn)
+    const data = caver.klay.abi.encodeFunctionCall({
       name: 'transfer',
       type: 'function',
       inputs: [{
@@ -47,22 +48,23 @@ class SmartContractExecution extends Component {
         type: 'uint256',
         name: 'amount',
       }],
-    }, [to, web3.utils.toWei(amount, 'ether')])
+    }, [to, caver.utils.toPeb(amount, 'KLAY')])
 
-    web3.eth.sendTransaction({
+    caver.klay.sendTransaction({
       from,
       to: contractAddress,
       data,
+      gas,
     })
-      .once('transactionHash', (transactionHash) => {
+      .on('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
         this.setState({ txHash: transactionHash })
       })
-      .once('receipt', (receipt) => {
+      .on('receipt', (receipt) => {
         console.log('receipt', receipt)
         this.setState({ receipt: JSON.stringify(receipt) })
       })
-      .once('error', (error) => {
+      .on('error', (error) => {
         console.log('error', error)
         this.setState({ error: error.message })
       })
@@ -77,7 +79,7 @@ class SmartContractExecution extends Component {
   } */
 
   render() {
-    const { from, to, amount, contractAddress, txHash, receipt, error } = this.state
+    const { from, to, amount, contractAddress, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractExecution">
         <h2>Token Transfer</h2>
@@ -112,6 +114,13 @@ class SmartContractExecution extends Component {
           value={contractAddress}
           onChange={this.handleChange}
           placeholder="The address of the deployed smart contract"
+        />
+        <Input
+          name="gas"
+          label="Gas"
+          value={gas}
+          onChange={this.handleChange}
+          placeholder="Gas"
         />
         <Button
           title="Contract Execute"

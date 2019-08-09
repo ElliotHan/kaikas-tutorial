@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Web3 from 'web3'
+import Caver from 'caver-js'
 
 import Input from 'components/Input'
 import Button from 'components/Button'
@@ -14,6 +14,7 @@ class ValueTransfer extends Component {
       from: props.from,
       to: '',
       value: '',
+      gas: '',
       txHash: null,
       receipt: null,
       error: null,
@@ -34,13 +35,15 @@ class ValueTransfer extends Component {
   }
 
   handleValueTransfer = () => {
-    const web3 = new Web3(ethereum)
+    const caver = new Caver(klaytn)
     const { from, to, value } = this.state
 
-    web3.eth.sendTransaction({
+    caver.klay.sendTransaction({
       from,
       to,
-      value: web3.utils.toWei(value.toString(), 'ether'),
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
+      // For a simple transaction (sending ether) you should be fine with 30,000
+      gas: 30000,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -57,7 +60,7 @@ class ValueTransfer extends Component {
   }
 
   render() {
-    const { from, to, value, txHash, receipt, error } = this.state
+    const { from, to, value, gas, txHash, receipt, error } = this.state
     return (
       <div className="ValueTransfer">
         <h2>Value Transfer</h2>
@@ -81,7 +84,14 @@ class ValueTransfer extends Component {
           label="Value"
           value={value}
           onChange={this.handleChange}
-          placeholder="Value (ETH)"
+          placeholder="Value (KLAY)"
+        />
+        <Input
+          name="gas"
+          label="Gas"
+          value={gas}
+          onChange={this.handleChange}
+          placeholder="Value (KLAY)"
         />
         <Button
           title="Value Transfer"

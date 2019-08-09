@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Web3 from 'web3'
+import Caver from 'caver-js'
 
 import Input from 'components/Input'
 import Button from 'components/Button'
@@ -13,6 +13,7 @@ class SmartContractDeploy extends Component {
     this.state = {
       from: props.from,
       data: '',
+      gas: '',
       txHash: null,
       receipt: null,
       error: null,
@@ -33,12 +34,13 @@ class SmartContractDeploy extends Component {
   }
 
   handleSmartContractDeploy = () => {
-    const web3 = new Web3(ethereum)
-    const { from, data } = this.state
-
-    web3.eth.sendTransaction({
+    const caver = new Caver(klaytn)
+    const { from, data, gas } = this.state
+    
+    caver.klay.sendTransaction({
       from,
       data,
+      gas,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -55,7 +57,7 @@ class SmartContractDeploy extends Component {
   }
 
   render() {
-    const { from, data, txHash, receipt, error } = this.state
+    const { from, data, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractDeploy">
         <h2>Smart Contract Deploy</h2>
@@ -76,6 +78,13 @@ class SmartContractDeploy extends Component {
           value={data}
           onChange={this.handleChange}
           placeholder="A bytecode of smart contract to be deployed."
+        />
+        <Input
+          name="gas"
+          label="Gas"
+          value={gas}
+          onChange={this.handleChange}
+          placeholder="Gas you willing to pay for contract deploy"
         />
         <Button
           title="Deploy Contract"
