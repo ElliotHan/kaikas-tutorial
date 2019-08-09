@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Caver from 'caver-js'
 import Web3 from 'web3'
 
 import Nav from 'components/Nav'
@@ -20,47 +21,65 @@ const txTypeList = [
   'Token Transfer',
   'Value Transfer (Fee Delegation)',
   'Token Transfer (Fee Delegation)',
+  'Count App',
 ]
 
 class KaikasPage extends Component {
   constructor(props) {
     super(props)
-    this.web3 = null
+    this.caver = null
     this.state = {
       txType: null,
       account: 'Login with Kaikas :)',
       balance: 0,
+      network: null,
     }
+  }
+  
+  componentDidMount() {
+    const { ethereum } = window
+    const web3 = new Web3(ethereum)
+
     this.loadAccountInfo()
+    this.setNetworkInfo()
   }
 
   setAccountInfo = async (provider) => {
     const account = provider.selectedAddress
-    const balance = await this.web3.eth.getBalance(account)
+    const balance = await this.caver.klay.getBalance(account)
     this.setState({
       account,
-      balance: this.web3.utils.fromWei(balance, 'ether'),
+      balance: this.caver.utils.fromPeb(balance, 'KLAY'),
     })
   }
 
+  setNetworkInfo = () => {
+    const { klaytn } = window
+
+    if (klaytn !== undefined) {
+      this.setState({ network: klaytn.networkVersion })
+      klaytn.on('networkChanged', () => this.setNetworkInfo(klaytn.networkVersion))
+    }
+  }
+
   loadAccountInfo = async () => {
-    const { ethereum } = window
+    const { klaytn } = window
 
     // 1. Modern dapp browsers...
-    if (ethereum) {
-      this.web3 = new Web3(ethereum)
+    if (klaytn) {
+      this.caver = new Caver(klaytn)
       try {
-        await ethereum.enable()
-        this.setAccountInfo(ethereum)
-        ethereum.on('accountsChanged', () => this.setAccountInfo(ethereum))
+        await klaytn.enable()
+        this.setAccountInfo(klaytn)
+        klaytn.on('accountsChanged', () => this.setAccountInfo(klaytn))
       } catch (error) {
         console.log('User denied account access')
       }
     }
     // 2. Legacy dapp browsers...
-    else if (window.web3) {
-      this.web3 = new Web3(window.web3.currentProvider)
-      this.setAccountInfo(this.web3)
+    else if (window.caver) {
+      this.caver = new Caver(window.caver.currentProvider)
+      this.setAccountInfo(this.caver)
     }
     // 3. Non-dapp browsers...
     else {
@@ -81,19 +100,21 @@ class KaikasPage extends Component {
       case 'Token Transfer':
         return <SmartContractExecution from={from} />
       case 'Value Transfer (Fee Delegation)':
-        return <ValueTransferFD />
+        return <ValueTransferFD from={from} />
       case 'Token Transfer (Fee Delegation)':
         return <SmartContractExecutionFD />
+      case 'Count App':
+        return 'Count App Example'
       default:
         return 'Select Transaction Example :)'
     }
   }
 
   render() {
-    const { account, balance, txType } = this.state
+    const { account, balance, txType, network } = this.state
     return (
       <div className="KaikasPage">
-        <Nav />
+        <Nav network={network} />
         <div className="KaikasPage__main">
           <WalletInfo address={account} balance={balance} />
           <div className="KaikasPage__content">
