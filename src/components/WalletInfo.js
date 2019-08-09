@@ -14,7 +14,7 @@ const WalletInfo = ({ address, balance }) => (
       <div className="WalletInfo__info">
         <span className="WalletInfo__label">Balance</span>
         <span className="WalletInfo__balance">{balance}</span>
-        <span className="WalletInfo__unit">ETH</span>
+        <span className="WalletInfo__unit">KLAY</span>
       </div>
     </div>
     <p className="WalletInfo__faucet">
