@@ -22,3 +22,23 @@
   width: 180px;
   img { width: 100%; }
 }
+
+.Nav__network {
+  padding: 2px 15px;
+  border: 1px solid $dark-brown;
+  border-radius: 12px;
+  font-size: 12px;
+  color: $dark-brown;
+  text-align: center;
+
+  &--loading {
+    color: $brown-grey;
+    border-color: $brown-grey;
+  }
+
+  span {
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 10px;
+  }
+}

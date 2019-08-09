@@ -1,7 +1,9 @@
 import React from 'react'
+import cx from 'classnames'
+import networks from 'constants/networks'
 import './Nav.scss'
 
-const Nav = () => (
+const Nav = ({ network }) => (
   <header className="Nav">
     <div className="Nav__inner">
       <h1 className="Nav__logo">
@@ -12,6 +14,12 @@ const Nav = () => (
           />
         </a>
       </h1>
+      <div className={cx('Nav__network', {
+        'Nav__network--loading': network === 'loading',
+      })}>
+        <span>&#9679;</span>
+        {networks[network]}
+      </div>
     </div>
   </header>
 )
