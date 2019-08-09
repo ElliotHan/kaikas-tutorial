@@ -4,6 +4,12 @@ import Button from 'components/Button'
 
 import './AddToken.scss'
 
+const BongToken = {
+  tokenAddress: '0xEa51fb63dD8cfc8574BB158054D86CA786e00F87',
+  tokenSymbol: 'BONG',
+  tokenDecimals: 18,
+  tokenImage: 'https://avatars3.githubusercontent.com/u/32095134?s=460&v=4',
+}
 class AddToken extends Component {
   state = {
     tokenAddress: '',
@@ -20,7 +26,7 @@ class AddToken extends Component {
 
   handleAddToken = () => {
     const { tokenAddress, tokenSymbol, tokenDecimals, tokenImage } = this.state
-    ethereum.sendAsync({
+    klaytn.sendAsync({
       method: 'wallet_watchAsset',
       params: {
         type: 'ERC20',
@@ -36,11 +42,12 @@ class AddToken extends Component {
   }
 
   addExampleToken = () => {
+    const { tokenAddress, tokenSymbol, tokenDecimals, tokenImage } = BongToken
     this.setState({
-      tokenAddress: '0x617b3f8050a0bd94b6b1da02b4384ee5b4df13f4',
-      tokenSymbol: 'MARK',
-      tokenDecimals: 18,
-      tokenImage: 'https://pbs.twimg.com/profile_images/802481220340908032/M_vde_oi_400x400.jpg',
+      tokenAddress,
+      tokenSymbol,
+      tokenDecimals,
+      tokenImage,
     }, () => this.handleAddToken())
   }
 
@@ -53,15 +60,15 @@ class AddToken extends Component {
           <div className="AddToken__sample">
             <img
               className="AddToken__sampleImage"
-              alt="MetaMarks"
-              src="https://pbs.twimg.com/profile_images/802481220340908032/M_vde_oi_400x400.jpg"
+              alt="BongToken image"
+              src={BongToken.tokenImage}
             />
             <div className="AddToken__sampleContent">
-              <p className="AddToken__sampleName">MetaMarks (MARK)</p>
-              <p className="AddToken__sampleAddress">0x617b3f8050a0bd94b6b1da02b4384ee5b4df13f4</p>
-              <p className="AddToken__sampleDecimals">Decimals: 18</p>
+              <p className="AddToken__sampleName">{`BongToken (${BongToken.tokenSymbol})`}</p>
+              <p className="AddToken__sampleAddress">{BongToken.tokenAddress}</p>
+              <p className="AddToken__sampleDecimals">{`Decimals: ${BongToken.tokenDecimals}`}</p>
               <Button
-                title="Add to metamask"
+                title="Add to Kaikas"
                 onClick={this.addExampleToken}
               />
             </div>
