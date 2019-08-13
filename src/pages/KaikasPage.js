@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Caver from 'caver-js'
 import Web3 from 'web3'
+import { isEmpty } from 'lodash'
 
 import Nav from 'components/Nav'
 import WalletInfo from 'components/WalletInfo'
@@ -55,11 +56,10 @@ class KaikasPage extends Component {
 
   setNetworkInfo = () => {
     const { klaytn } = window
+    if(isEmpty(klaytn)) return
 
-    if (klaytn !== undefined) {
-      this.setState({ network: klaytn.networkVersion })
-      klaytn.on('networkChanged', () => this.setNetworkInfo(klaytn.networkVersion))
-    }
+    this.setState({ network: klaytn.networkVersion })
+    klaytn.on('networkChanged', () => this.setNetworkInfo(klaytn.networkVersion))
   }
 
   loadAccountInfo = async () => {

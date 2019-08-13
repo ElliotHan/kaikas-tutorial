@@ -36,6 +36,11 @@
     border-color: $brown-grey;
   }
 
+  &--error {
+    color: $alert-red;
+    border-color: $alert-red;
+  }
+
   span {
     display: inline-block;
     margin-right: 6px;
