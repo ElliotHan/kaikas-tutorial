@@ -12,10 +12,12 @@ import AddToken from 'components/AddToken'
 import SmartContractExecution from 'components/SmartContractExecution'
 import ValueTransferFD from 'components/ValueTransferFD'
 import SmartContractExecutionFD from 'components/SmartContractExecutionFD'
+import AccountUpdate from 'components/AccountUpdate'
 
 import './KaikasPage.scss'
 
 const txTypeList = [
+  'Account Update',
   'Value Transfer',
   'Smart Contract Deploy',
   'Add Token',
@@ -91,6 +93,8 @@ class KaikasPage extends Component {
 
   renderTxExample = (txType, from) => {
     switch (txType) {
+      case 'Account Update':
+        return <AccountUpdate from={from} />
       case 'Add Token':
         return <AddToken />
       case 'Value Transfer':
