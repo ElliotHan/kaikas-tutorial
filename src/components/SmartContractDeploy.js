@@ -13,7 +13,7 @@ class SmartContractDeploy extends Component {
     this.state = {
       from: props.from,
       data: '',
-      gas: '',
+      gas: '3000000',
       txHash: null,
       receipt: null,
       error: null,
@@ -55,12 +55,15 @@ class SmartContractDeploy extends Component {
         this.setState({ error: error.message })
       })
   }
-
+  /**
+   * TODO
+   * example link : bytecode, contractAddress
+   * parameter input (token)
+   */
   render() {
     const { from, data, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractDeploy">
-        <h2>Smart Contract Deploy</h2>
         <p className="SmartContractDeploy__guide">
           To get bytecode of contract, Use <a href="http://ide.klaytn.com/">Klaytn IDE</a> compile function
         </p>

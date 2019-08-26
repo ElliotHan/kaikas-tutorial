@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import Caver from 'caver-js'
-import Web3 from 'web3'
-import { isEmpty } from 'lodash'
 
 import Nav from 'components/Nav'
 import WalletInfo from 'components/WalletInfo'
@@ -13,18 +11,22 @@ import SmartContractExecution from 'components/SmartContractExecution'
 import ValueTransferFD from 'components/ValueTransferFD'
 import SmartContractExecutionFD from 'components/SmartContractExecutionFD'
 import AccountUpdate from 'components/AccountUpdate'
+import SignTransaction from 'components/SignTransaction'
 
 import './KaikasPage.scss'
 
 const txTypeList = [
-  'Account Update',
   'Value Transfer',
   'Smart Contract Deploy',
   'Add Token',
   'Token Transfer',
+  'Sign Transaction',
   'Value Transfer (Fee Delegation)',
+  'Value Transfer with Memo (Fee Delegation)',
   'Token Transfer (Fee Delegation)',
-  'Count App',
+  'Token Transfer (Fee Delegation with Ratio)',
+  'Account Update',
+  'Contract Example: Count App',
 ]
 
 class KaikasPage extends Component {
@@ -33,32 +35,32 @@ class KaikasPage extends Component {
     this.caver = null
     this.state = {
       txType: null,
-      account: 'Login with Kaikas :)',
+      account: '',
       balance: 0,
       network: null,
     }
   }
   
   componentDidMount() {
-    const { ethereum } = window
-    const web3 = new Web3(ethereum)
-
     this.loadAccountInfo()
     this.setNetworkInfo()
   }
 
   setAccountInfo = async (provider) => {
+    console.log('provider', provider)
     const account = provider.selectedAddress
     const balance = await this.caver.klay.getBalance(account)
+    console.log('1', this.state)
     this.setState({
       account,
       balance: this.caver.utils.fromPeb(balance, 'KLAY'),
     })
+    console.log('2', this.state)
   }
 
   setNetworkInfo = () => {
     const { klaytn } = window
-    if(isEmpty(klaytn)) return
+    if(klaytn === undefined) return
 
     this.setState({ network: klaytn.networkVersion })
     klaytn.on('networkChanged', () => this.setNetworkInfo(klaytn.networkVersion))
@@ -72,6 +74,7 @@ class KaikasPage extends Component {
       this.caver = new Caver(klaytn)
       try {
         await klaytn.enable()
+        console.log(klaytn.selectedAddress)
         this.setAccountInfo(klaytn)
         klaytn.on('accountsChanged', () => this.setAccountInfo(klaytn))
       } catch (error) {
@@ -85,7 +88,7 @@ class KaikasPage extends Component {
     }
     // 3. Non-dapp browsers...
     else {
-      console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      console.log('Non-Klaytn browser detected. You should consider trying MetaMask!')
     }
   }
 
@@ -93,24 +96,30 @@ class KaikasPage extends Component {
 
   renderTxExample = (txType, from) => {
     switch (txType) {
-      case 'Account Update':
-        return <AccountUpdate from={from} />
-      case 'Add Token':
-        return <AddToken />
       case 'Value Transfer':
         return <ValueTransfer from={from} />
       case 'Smart Contract Deploy':
         return <SmartContractDeploy from={from} />
       case 'Token Transfer':
         return <SmartContractExecution from={from} />
+      case 'Add Token':
+          return <AddToken />
+      case 'Sign Transaction':
+          return <SignTransaction from={from} />
       case 'Value Transfer (Fee Delegation)':
         return <ValueTransferFD from={from} />
+      case 'Value Transfer with Memo (Fee Delegation)':
+        return <ValueTransferFD from={from} isMemo />
       case 'Token Transfer (Fee Delegation)':
-        return <SmartContractExecutionFD />
-      case 'Count App':
+        return <SmartContractExecutionFD from={from} />
+      case 'Token Transfer (Fee Delegation with Ratio)':
+        return <SmartContractExecutionFD from={from} feeRatio />
+      case 'Account Update':
+          return <AccountUpdate from={from} />
+      case 'Contract Example: Count App':
         return 'Count App Example'
       default:
-        return 'Select Transaction Example :)'
+        return (<p className="KaikasPage__guide">Select A Transaction Example :)</p>)
     }
   }
 
@@ -130,10 +139,8 @@ class KaikasPage extends Component {
               list={txTypeList}
             />
             <div className="KaikasPage__txExample">
-              {txType
-                ? this.renderTxExample(txType, account)
-                : <p className="KaikasPage__guide">Select Transaction Example :)</p>
-              }
+              <h2 className="KaikasPage__txExampleTitle">{txType}</h2>
+              {this.renderTxExample(txType, account)}
             </div>
           </div>
         </div>

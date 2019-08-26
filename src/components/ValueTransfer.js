@@ -14,10 +14,11 @@ class ValueTransfer extends Component {
       from: props.from,
       to: '',
       value: '',
-      gas: '',
+      gas: '3000000',
       txHash: null,
       receipt: null,
       error: null,
+      rawTransaction: null,
     }
   }
 
@@ -36,14 +37,14 @@ class ValueTransfer extends Component {
 
   handleValueTransfer = () => {
     const caver = new Caver(klaytn)
-    const { from, to, value } = this.state
+    const { from, to, value, memo, gas } = this.state
 
     caver.klay.sendTransaction({
       from,
       to,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
-      // For a simple transaction (sending ether) you should be fine with 30,000
-      gas: 30000,
+      data: memo,
+      gas,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -59,11 +60,24 @@ class ValueTransfer extends Component {
       })
   }
 
+  signTransaction = async () => {
+    const { from, to, value, memo, gas } = this.state
+    const { rawTransaction } = await caver.klay.signTransaction({
+      type: this.props.isMemo ? 'FEE_DELEGATED_VALUE_TRANSFER_MEMO' : 'FEE_DELEGATED_VALUE_TRANSFER_WITH_RATIO',
+      from,
+      to,
+      value,
+      data: memo,
+      gas,
+    })
+    this.setState({ rawTransaction })
+  }
+
   render() {
+    const { isFeeDelegation, rawTransaction } = this.props
     const { from, to, value, gas, txHash, receipt, error } = this.state
     return (
       <div className="ValueTransfer">
-        <h2>Value Transfer</h2>
         <Input
           name="from"
           label="From"
@@ -91,17 +105,26 @@ class ValueTransfer extends Component {
           label="Gas"
           value={gas}
           onChange={this.handleChange}
-          placeholder="Value (KLAY)"
+          placeholder="Gas (Peb)"
         />
         <Button
-          title="Value Transfer"
+          title={isFeeDelegation ? 'Sign Transaction' : 'Send KLAY'}
           onClick={this.handleValueTransfer}
+          // onClick={isFeeDelegation ? this.signTransaction : this.handleValueTransfer}
         />
-        <TxResult
-          txHash={txHash}
-          receipt={receipt}
-          error={error}
-        />
+        {rawTransaction && (
+          <Message
+            type="rawTransaction"
+            message={JSON.stringify(rawTransaction)}
+          />
+        )}
+        {!isFeeDelegation && (
+          <TxResult
+            txHash={txHash}
+            receipt={receipt}
+            error={error}
+          />
+        )}
       </div>
     )
   }

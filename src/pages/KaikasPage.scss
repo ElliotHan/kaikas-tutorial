@@ -9,7 +9,7 @@
   max-width: 700px;
   margin: 0 auto;
   padding-top: 70px;
-  padding: 70px 10px 0 10px;
+  padding: 60px 10px;
 }
 
 .KaikasPage__content {
@@ -20,13 +20,16 @@
   padding: 20px;
 }
 
+.KaikasPage__txExampleTitle {
+  padding-bottom: 30px;
+}
+
 .KaikasPage__dropdown {
   margin-bottom: 20px;
 }
 
 .KaikasPage__guide {
   padding: 30px 0;
-  color: $dark-brown;
   text-align: center;
   font-size: 18px;
   font-weight: bold;

@@ -1,0 +1,744 @@
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.Message {
+  font-size: 12px;
+  line-height: 18px;
+  font-family: 'RobotoMono';
+  word-break: break-all;
+  padding: 10px 24px;
+  overflow: scroll;
+  background-color: #13141F;
+  padding: 10px;
+  padding-left: 0;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 20px; }
+  .Message--error .Message__status {
+    vertical-align: middle;
+    padding-top: 20px;
+    color: rgba(245, 80, 10, 0.8);
+    background-image: url("/images/ico-error.svg");
+    background-repeat: no-repeat;
+    background-position: top center; }
+  .Message--error .Message__message {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 14px;
+    color: rgba(245, 80, 10, 0.8);
+    width: calc(100% - 80px); }
+  .Message--txHash .Message__status {
+    vertical-align: middle;
+    padding-top: 0;
+    color: rgba(245, 166, 10, 0.8);
+    background: none; }
+  .Message--txHash .Message__message {
+    color: rgba(245, 166, 10, 0.8);
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 14px;
+    color: white;
+    width: calc(100% - 80px); }
+  .Message--receipt .Message__status {
+    vertical-align: top;
+    margin-top: 5px;
+    padding-top: 20px;
+    color: white;
+    background-image: url("/images/ico-receipt.svg");
+    background-repeat: no-repeat;
+    background-position: top center; }
+  .Message--receipt .Message__message {
+    width: calc(100% - 80px);
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 14px;
+    color: white; }
+  .Message--rawTransaction {
+    margin-bottom: 0;
+    margin-top: 10px; }
+    .Message--rawTransaction .Message__status {
+      vertical-align: top;
+      padding-top: 30px;
+      color: white;
+      background: top center/25px no-repeat url("/images/icon-tx.svg");
+      line-height: 1.1; }
+    .Message--rawTransaction .Message__message {
+      width: calc(100% - 80px);
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 14px;
+      color: white; }
+
+.Message__status {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  font-weight: bold; }
+
+.Message__message {
+  display: inline-block;
+  width: calc(100% - 80px);
+  vertical-align: middle; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.App {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  min-width: 414px;
+  min-height: 100%; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.Nav {
+  width: 100%;
+  height: 75px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: #fff;
+  border: 1px solid #e1e1e1; }
+
+.Nav__inner {
+  max-width: 935px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+.Nav__logo {
+  width: 180px; }
+  .Nav__logo img {
+    width: 100%; }
+
+.Nav__network {
+  padding: 2px 15px;
+  border: 1px solid #4f473e;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #4f473e;
+  text-align: center; }
+  .Nav__network--loading {
+    color: #999999;
+    border-color: #999999; }
+  .Nav__network--error {
+    color: #f54137;
+    border-color: #f54137; }
+  .Nav__network span {
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 10px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.WalletInfo {
+  width: 100%;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e1e1e1; }
+
+.WalletInfo__title {
+  margin-bottom: 15px; }
+
+.WalletInfo__infoBox {
+  width: 100%;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  background-color: white; }
+
+.WalletInfo__info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 12px 18px; }
+  .WalletInfo__info:first-child {
+    width: 60%;
+    border-right: 1px solid #e1e1e1; }
+  .WalletInfo__info:nth-child(2) {
+    width: 40%; }
+
+.WalletInfo__label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #999999;
+  margin-bottom: 3px; }
+
+.WalletInfo__balance {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: calc(100% - 34px);
+  vertical-align: bottom; }
+
+.WalletInfo__unit {
+  display: inline-block;
+  padding-left: 5px;
+  text-align: right; }
+
+.WalletInfo__faucet {
+  font-size: 12px;
+  color: #999999;
+  text-align: right;
+  padding-right: 10px; }
+
+.WalletInfo__link {
+  display: inline-block;
+  font-weight: bold;
+  margin-left: 8px;
+  cursor: pointer; }
+  .WalletInfo__link:hover {
+    text-decoration: underline; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.Input {
+  position: relative;
+  margin-bottom: 10px; }
+
+.Input__label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #999999;
+  margin-bottom: 8px; }
+
+.Input__input {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #e1e1e1;
+  padding: 22px 24px;
+  border-radius: 5px; }
+  .Input__input::placeholder {
+    color: #cccccc; }
+  .Input__input--err {
+    border-color: #f54137; }
+  .Input__input--readOnly {
+    color: #cccccc; }
+
+.Input__err {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 12px;
+  color: #f54137; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.Dropdown {
+  position: relative;
+  text-align: left;
+  color: #999999;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 18px;
+  font-family: 'GoogleSans';
+  font-weight: bold; }
+
+.Dropdown__title {
+  position: relative;
+  color: #4f473e;
+  text-align: center;
+  font-size: 16px;
+  padding: 15px 24px 14px;
+  border-radius: 3px;
+  border: 1px solid #e1e1e1;
+  background-color: white; }
+  .Dropdown__title::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: center/contain no-repeat url("/images/icon-downArrow.svg"); }
+  .Dropdown--active .Dropdown__title::after {
+    background: center/contain no-repeat url("/images/icon-upArrow.svg"); }
+
+.Dropdown__list {
+  position: absolute;
+  padding: 12px 0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background-color: #fff;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.08);
+  width: 100%;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px;
+  z-index: 10; }
+
+.Dropdown__listItem {
+  text-align: left;
+  padding: 16px 24px 15px; }
+  .Dropdown__listItem:hover {
+    color: #4f473e;
+    background-color: #e1e1e1; }
+  .Dropdown__listItem:nth-child(6) {
+    border-top: 1px solid #e1e1e1; }
+  .Dropdown__listItem:nth-child(11) {
+    border-top: 1px solid #e1e1e1; }
+  .Dropdown__listItem:nth-child(6)::before, .Dropdown__listItem:nth-child(7)::before, .Dropdown__listItem:nth-child(8)::before, .Dropdown__listItem:nth-child(9)::before, .Dropdown__listItem:nth-child(10)::before {
+    content: "";
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: center/contain url("/images/favicon@16.png");
+    margin-right: 7px; }
+  .Dropdown__listItem--white {
+    color: #999999;
+    text-align: center; }
+    .Dropdown__listItem--white:hover {
+      background-color: #999999; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.Button {
+  -webkit-appearance: none;
+  width: 100%;
+  background-color: #e1e1e1;
+  color: #999999;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 23px;
+  cursor: pointer;
+  outline: none; }
+  .Button:hover, .Button:active {
+    background-color: #4f473e;
+    color: #FFFFFF; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.TxResult {
+  padding-top: 30px;
+  margin-top: 30px;
+  border-top: 1px dashed #cccccc; }
+
+.TxResult__title {
+  margin-bottom: 12px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+@font-face {
+  font-family: 'SFUIText';
+  font-style: normal;
+  font-weight: bold;
+  src: url("/fonts/SFUIText-Bold.ttf") format("truetype");
+  font-display: swap; }
+
+@font-face {
+  font-family: 'SFUIText';
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/SFUIText-Semibold.ttf") format("truetype");
+  font-display: swap; }
+
+@font-face {
+  font-family: 'SFUIText';
+  font-style: normal;
+  font-weight: normal;
+  src: url("/fonts/SFUIText-Regular.ttf") format("truetype");
+  font-display: swap; }
+
+@font-face {
+  font-family: 'SFUIText';
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/SFUIText-Medium.ttf") format("truetype");
+  font-display: swap; }
+
+@font-face {
+  font-family: 'SFUIText';
+  font-style: normal;
+  font-weight: 200;
+  src: url("/fonts/SFUIText-Light.ttf") format("truetype");
+  font-display: swap; }
+
+html, body, #root {
+  height: 100%; }
+
+html {
+  font-size: 10px; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  font-family: SFUIText, Apple SD Gothic Neo, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #4f473e; }
+  body *, body *::before, body *::after {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; }
+  body a {
+    color: inherit;
+    text-decoration: none; }
+  body p, body h1, body h2, body h3, body h4, body h5, body h6 {
+    margin: 0; }
+  body button, body input, body select, body textarea {
+    font-family: unset; }
+  body button {
+    padding: unset;
+    background-color: unset;
+    border: unset; }
+  body ul {
+    margin: 0;
+    padding: 0;
+    list-style: none; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.ValueTransfer .Input {
+  margin-bottom: 10px; }
+
+.ValueTransfer h2 {
+  margin-bottom: 20px; }
+
+.ValueTransfer p {
+  margin-bottom: 20px; }
+
+.ValueTransferFD__sender {
+  padding-bottom: 20px;
+  margin-bottom: 20px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.SmartContractDeploy .Input {
+  margin-bottom: 10px; }
+
+.SmartContractDeploy h2 {
+  margin-bottom: 20px;
+  color: #4f473e; }
+
+.SmartContractDeploy .SmartContractDeploy__guide {
+  font-weight: bold;
+  color: #999999;
+  margin-bottom: 20px; }
+  .SmartContractDeploy .SmartContractDeploy__guide a {
+    color: #2f3998;
+    text-decoration: underline; }
+
+.SmartContractDeploy__txResult {
+  margin-top: 40px; }
+
+.SmartContractDeploy__txResultTitle {
+  margin-bottom: 20px;
+  color: #4f473e; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.AddToken .Input {
+  margin-bottom: 10px; }
+
+.AddToken__section:first-child {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #e1e1e1; }
+
+.AddToken__title {
+  color: #707070;
+  margin-bottom: 15px; }
+
+.AddToken__sample {
+  width: 530px;
+  padding: 15px;
+  line-height: 1.5;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px; }
+  .AddToken__sample:after {
+    content: "";
+    display: block;
+    clear: both; }
+
+.AddToken__sampleImage {
+  float: left;
+  width: 50px;
+  margin-right: 10px;
+  border-radius: 50%; }
+
+.AddToken__sampleContent {
+  float: right; }
+
+.AddToken__sampleName {
+  font-size: 20px;
+  font-weight: bold;
+  color: #4f473e; }
+
+.AddToken__sampleAddress {
+  font-size: 16px;
+  font-weight: bold;
+  color: #999999; }
+
+.AddToken__sampleDecimals {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 10px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.SmartContractExecution .SmartContractExecution__guide {
+  color: #999999;
+  margin-bottom: 20px; }
+  .SmartContractExecution .SmartContractExecution__guide a {
+    color: #2f3998;
+    text-decoration: underline; }
+
+.SmartContractExecutionFD__sender {
+  padding-bottom: 20px;
+  margin-bottom: 20px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.AccountUpdate {
+  margin-bottom: 30px; }
+
+.AccountUpdate__generateKeypair {
+  margin-bottom: 30px; }
+
+.AccountUpdate__generateButton {
+  margin-bottom: 10px; }
+
+.AccountUpdate__generateKeypair {
+  padding: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 10px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.SignTransaction__button {
+  margin-bottom: 20px; }
+/*
+1.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: bold;
+
+2.
+font-size: 11px;
+line-height: 18px;
+font-family: 'Roboto';
+font-weight: normal;
+
+ */
+.KaikasPage {
+  width: 100%;
+  height: 100%; }
+
+.KaikasPage__main {
+  width: 100%;
+  min-height: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: 70px;
+  padding: 60px 10px; }
+
+.KaikasPage__content {
+  padding: 40px 0; }
+
+.KaikasPage__txExample {
+  padding: 20px; }
+
+.KaikasPage__txExampleTitle {
+  padding-bottom: 30px; }
+
+.KaikasPage__dropdown {
+  margin-bottom: 20px; }
+
+.KaikasPage__guide {
+  padding: 30px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold; }
+
+/*# sourceMappingURL=bundle-88719d.css.map*/

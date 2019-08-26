@@ -56,7 +56,7 @@ class AddToken extends Component {
     return (
       <div className="AddToken">
         <section className="AddToken__section">
-          <h2>Sample Token</h2>
+          <h3 className="AddToken__title"># Sample Token</h3>
           <div className="AddToken__sample">
             <img
               className="AddToken__sampleImage"
@@ -75,7 +75,7 @@ class AddToken extends Component {
           </div>
         </section>
         <section className="AddToken__section">
-          <h2>Custom Token</h2>
+          <h3 className="AddToken__title"># Custom Token</h3>
           <Input
             name="tokenAddress"
             label="Token Address"

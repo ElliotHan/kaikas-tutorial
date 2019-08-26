@@ -54,11 +54,14 @@
     color: $dark-brown;
     background-color: $light-grey;
   }
-  &:nth-child(5) { border-top: 1px solid $light-grey; }
+  &:nth-child(6) { border-top: 1px solid $light-grey; }
+  &:nth-child(11) { border-top: 1px solid $light-grey; }
 
-  &:nth-child(5),
   &:nth-child(6),
-  &:nth-child(7) {
+  &:nth-child(7),
+  &:nth-child(8),
+  &:nth-child(9),
+  &:nth-child(10) {
     &::before {
       content: "";
       display: inline-block;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import cx from 'classnames'
 
 import './Message.scss'
@@ -20,7 +20,12 @@ const Message = ({
         {type === 'error' && 'error'}
         {type === 'txHash' && 'txHash'}
         {type === 'receipt' && 'receipt'}
-        {type === 'rawTransaction' && `SignedTransaction`}
+        {type === 'rawTransaction' && (
+          <Fragment>
+            Signed<br />
+            Transaction
+          </Fragment>
+        )}
       </div>
       <div className="Message__message">
         {message}

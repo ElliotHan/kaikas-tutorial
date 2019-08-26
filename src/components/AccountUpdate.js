@@ -13,12 +13,11 @@ class AccountUpdate extends Component {
     this.state = {
       from: props.from,
       publicKey: '',
+      walletKey: '',
       gas: '300000',
       txHash: null,
       receipt: null,
       error: null,
-      privateKey: '',
-      publicKey: '',
     }
   }
 
@@ -29,26 +28,22 @@ class AccountUpdate extends Component {
     return null
   }
 
-  handleGenerateNewPublicKey = () => {
-    const { privateKey } = caver.klay.accounts.create()
-    const publicKey = caver.klay.accounts.privateKeyToPublicKey(privateKey)
-    this.setState({ privateKey, publicKey })
-  }
-
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     })
   }
 
+  handleGenerateKeypair = () => {
+    const { privateKey } = caver.klay.accounts.create()
+    const publicKey = caver.klay.accounts.privateKeyToPublicKey(privateKey)
+    const walletKey = `${privateKey}0x00${this.state.from}`
+    this.setState({ publicKey, walletKey })
+  }
+
   handleUpdateAccount = () => {
     const { from, gas, publicKey } = this.state
-    console.log('tx', JSON.stringify({
-      type: 'ACCOUNT_UPDATE',
-      from,
-      publicKey,
-      gas,
-    }))
+
     caver.klay.sendTransaction({
         type: 'ACCOUNT_UPDATE',
         from,
@@ -72,60 +67,50 @@ class AccountUpdate extends Component {
   render() {
     const {
       from,
-      to,
-      value,
-      senderRawTransaction,
-      feePayerAddress,
-      feePayerPrivateKey,
+      publicKey,
+      walletKey,
+      gas,
       txHash,
       receipt,
       error,
-      gas,
-      privateKey,
-      publicKey,
-      walletKey = '',
     } = this.state
     return (
       <div className="AccountUpdate">
-        <h2>Account Update</h2>
-        <div className="AccountUpdate__walletKey">
-          <h3>Wallet Key</h3>
-          {isEmpty(walletKey) ? '-' : walletKey}
-        </div>
-        <div className="AccountUpdate__generatePublicKey">
-          <Input
+        <div className="AccountUpdate__generateKeypair">
+          <Button
+            className="AccountUpdate__generateButton"
+            title="Generate New Keypair"
+            onClick={this.handleGenerateKeypair}
+          />
+          {/* <Input
             name="publicKey"
-            label="Publickey"
+            label="New Public Key"
             value={publicKey}
             placeholder="Generate new publicKey for Account update"
             readOnly
-          />
+          /> */}
           <Input
-            name="privateKey"
-            label="privateKey"
-            value={privateKey}
-            placeholder="Generate new privateKey for Account update"
+            name="walletKey"
+            label="New Wallet Key"
+            value={walletKey}
+            placeholder="Generate new Wallet Key for Account update"
             readOnly
           />
-          <Button
-            title="Generate new publicKey"
-            onClick={this.handleGenerateNewPublicKey}
-          />
         </div>
-        <div className="AccountUpdate__sender">
+        <div className="AccountUpdate__transaction">
           <Input
             name="from"
             label="From"
             value={from}
-            placeholder="From Address"
+            placeholder="Login with Kaikas :)"
             readOnly
           />
           <Input
             name="publicKey"
-            label="PublicKey"
+            label="New Public Key"
             value={publicKey}
             onChange={this.handleChange}
-            placeholder="publicKey Address"
+            placeholder="New Public Key"
           />
           <Input
             name="gas"
@@ -138,13 +123,12 @@ class AccountUpdate extends Component {
             title="Account Update"
             onClick={this.handleUpdateAccount}
           />
-          <TxResult
-            txHash={txHash}
-            receipt={receipt}
-            error={error}
-          />
         </div>
-        
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

@@ -82,7 +82,6 @@ class SmartContractExecution extends Component {
     const { from, to, amount, contractAddress, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractExecution">
-        <h2>Token Transfer</h2>
         <p className="SmartContractExecution__guide">
           Will send a transaction to the smart contract and execute its method. Note that this can alter the smart contract state.
         </p>

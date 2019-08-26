@@ -1,24 +1,32 @@
 import React, { Component } from 'react'
-import caver from 'klaytn/caver'
-
+import Caver from 'caver-js'
 import Input from 'components/Input'
 import Button from 'components/Button'
-import TxResult from 'components/TxResult'
+import FeeDelegation from 'components/FeeDelegation'
+import Message from 'components/Message'
 
 import './SmartContractExecution.scss'
 
 class SmartContractExecutionFD extends Component {
-  state = {
-    from: '',
-    senderPrivateKey: '',
-    to: '',
-    amount: '',
-    contractAddress: '',
-    feePayerAddress: '0x80Fa56B456E2dF8A2D069Ead6F7C975e2685c87a',
-    feePayerPrivateKey: '0x7a9e8024d21e60f17bc095ac7e5d35384c2c9bc1eb07f407f43652736327037e',
-    txHash: null,
-    receipt: null,
-    error: null,
+  constructor(props) {
+    super(props)
+    this.state = {
+      contractAddress: '',
+      amount: '',
+      from: props.from,
+      to: '',
+      ratio: '',
+      txHash: null,
+      receipt: null,
+      error: null,
+    }
+  }
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.from !== prevState.from) {
+      return { from: nextProps.from }
+    }
+    return null
   }
 
   handleChange = (e) => {
@@ -27,8 +35,10 @@ class SmartContractExecutionFD extends Component {
     })
   }
 
-  handleSmartContractExecution = async () => {
-    const { from, senderPrivateKey, to, amount, contractAddress, feePayerAddress, feePayerPrivateKey } = this.state
+  signTransaction = async () => {
+    const caver = new Caver(window.klaytn)
+    const { from, to, amount, contractAddress, ratio } = this.state
+    const { feeRatio } = this.props
 
     const data = caver.klay.abi.encodeFunctionCall({
       name: 'transfer',
@@ -41,104 +51,91 @@ class SmartContractExecutionFD extends Component {
         name: 'amount',
       }],
     }, [to, caver.utils.toPeb(amount, 'KLAY')])
+    console.log('data', data)
 
-    const { rawTransaction: senderRawTransaction } = await caver.klay.accounts.signTransaction({
-      type: 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION',
+    const renderFeeRatio = feeRatio ? { feeRatio: ratio } : {}
+
+    const txData = {
+      type: feeRatio ? 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION_WITH_RATIO' : 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION',
       from,
       to: contractAddress,
-      gas: '300000',
+      gas: '3000000',
       data,
-    }, senderPrivateKey)
+      ...renderFeeRatio,
+    }
+    console.log('txData', txData)
 
-    caver.klay.accounts.wallet.add(feePayerPrivateKey, feePayerAddress)
+    const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
 
-    caver.klay.sendTransaction({
-      senderRawTransaction,
-      feePayer: feePayerAddress,
+    this.setState({
+      senderAddress: from,
+      senderRawTransaction
     })
-      .once('transactionHash', (transactionHash) => {
-        console.log('txHash', transactionHash)
-        this.setState({ txHash: transactionHash })
-      })
-      .once('receipt', (receipt) => {
-        console.log('receipt', receipt)
-        this.setState({ receipt: JSON.stringify(receipt) })
-      })
-      .once('error', (error) => {
-        console.log('error', error)
-        this.setState({ error: error.message })
-      })
   }
 
   render() {
-    const { from, senderPrivateKey, to, amount, contractAddress, feePayerAddress, feePayerPrivateKey, txHash, receipt, error } = this.state
+    const {
+      contractAddress,
+      amount,
+      from,
+      to,
+      ratio,
+      senderRawTransaction,
+    } = this.state
     return (
       <div className="SmartContractExecution">
-        <h2>Token Transfer (Fee Delegation)</h2>
-        <p className="SmartContractExecution__guide">
-          Klaytn 기반에서 작동하는 기능으로, 현재 메타마스크에 로그인된 Account와는 관계없습니다.<br />
-          KlaytnWallet에서 계정을 새로 생성한 후 테스트 해주세요.
-        </p>
-        <Input
-          name="from"
-          label="From (Sender Address)"
-          value={from}
-          onChange={this.handleChange}
-          placeholder="From Address"
-        />
-        <Input
-          name="senderPrivateKey"
-          label="Sender PrivateKey (임시 Input. 추후 Kaikas내에 내장될 것으로 예상)"
-          value={senderPrivateKey}
-          onChange={this.handleChange}
-          placeholder="Sender PrivateKey"
-        />
-        <Input
-          name="to"
-          label="To"
-          value={to}
-          onChange={this.handleChange}
-          placeholder="Address you want to send Token"
-        />
-        <Input
-          name="amount"
-          label="Amount"
-          value={amount}
-          onChange={this.handleChange}
-          placeholder="Amount of Eth you want to send"
-        />
-        <Input
-          name="contractAddress"
-          label="Contract Address (Token Address)"
-          value={contractAddress}
-          onChange={this.handleChange}
-          placeholder="The address of the deployed smart contract"
-        />
-        <h3>Fee Payer</h3>
-        <Input
-          name="feePayerAddress"
-          label="Fee Payer Address (임시 Input. 추후 Kaikas내에 내장될 것으로 예상)"
-          value={feePayerAddress}
-          onChange={this.handleChange}
-          placeholder="Fee Payer Address"
-          readOnly
-        />
-        <Input
-          name="feePayerPrivateKey"
-          label="Fee Payer PrivateKey (임시 Input. 추후 Kaikas내에 내장될 것으로 예상)"
-          value={feePayerPrivateKey}
-          onChange={this.handleChange}
-          placeholder="Fee Payer PrivateKey"
-          readOnly
-        />
-        <Button
-          title="Token Transfer (Fee Delegation)"
-          onClick={this.handleSmartContractExecution}
-        />
-        <TxResult
-          txHash={txHash}
-          receipt={receipt}
-          error={error}
+        <div className="SmartContractExecutionFD__sender">
+          <Input
+            name="from"
+            label="From (Sender Address)"
+            value={from}
+            placeholder="From Address"
+            readOnly
+          />
+          <Input
+            name="to"
+            label="To"
+            value={to}
+            onChange={this.handleChange}
+            placeholder="Address you want to send Token"
+          />
+          <Input
+            name="contractAddress"
+            label="Contract Address (Token Address)"
+            value={contractAddress}
+            onChange={this.handleChange}
+            placeholder="The address of the deployed smart contract"
+          />
+          <Input
+            name="amount"
+            label="Amount"
+            value={amount}
+            onChange={this.handleChange}
+            placeholder="Amount of Eth you want to send"
+          />
+          {this.props.feeRatio  && (
+            <Input
+              name="ratio"
+              label="Fee Ratio"
+              value={ratio}
+              onChange={this.handleChange}
+              placeholder="Ratio"
+            />
+          )}
+          <Button
+            title="Sign Transaction"
+            onClick={this.signTransaction}
+          />
+          {senderRawTransaction && (
+            <Message
+              type="rawTransaction"
+              message={JSON.stringify(senderRawTransaction)}
+            />
+          )}
+        </div>
+        <FeeDelegation
+          senderRawTransaction={senderRawTransaction}
+          feePayerAddress={from}
         />
       </div>
     )
