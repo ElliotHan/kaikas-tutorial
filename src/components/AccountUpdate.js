@@ -6,6 +6,7 @@ import Button from 'components/Button'
 import TxResult from 'components/TxResult'
 import Message from 'components/Message'
 import './AccountUpdate.scss'
+import FeeDelegation from './FeeDelegation';
 
 class AccountUpdate extends Component {
   constructor(props) {
@@ -14,10 +15,11 @@ class AccountUpdate extends Component {
       from: props.from,
       publicKey: '',
       walletKey: '',
-      gas: '300000',
+      gas: 3000000,
       txHash: null,
       receipt: null,
       error: null,
+      senderRawTransaction: null,
     }
   }
 
@@ -41,7 +43,24 @@ class AccountUpdate extends Component {
     this.setState({ publicKey, walletKey })
   }
 
-  handleUpdateAccount = () => {
+  signTransaction = async () => {
+    const { from, gas, publicKey } = this.state
+
+    const txData = {
+      type: 'FEE_DELEGATED_ACCOUNT_UPDATE',
+      from,
+      publicKey,
+      gas,
+    }
+    const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
+    this.setState({
+      senderAddress: from,
+      senderRawTransaction,
+    })
+  }
+
+  updateAccount = () => {
+    console.log('send')
     const { from, gas, publicKey } = this.state
 
     caver.klay.sendTransaction({
@@ -73,7 +92,9 @@ class AccountUpdate extends Component {
       txHash,
       receipt,
       error,
+      senderRawTransaction,
     } = this.state
+    const { isFeeDelegation } = this.props
     return (
       <div className="AccountUpdate">
         <div className="AccountUpdate__generateKeypair">
@@ -82,13 +103,6 @@ class AccountUpdate extends Component {
             title="Generate New Keypair"
             onClick={this.handleGenerateKeypair}
           />
-          {/* <Input
-            name="publicKey"
-            label="New Public Key"
-            value={publicKey}
-            placeholder="Generate new publicKey for Account update"
-            readOnly
-          /> */}
           <Input
             name="walletKey"
             label="New Wallet Key"
@@ -121,14 +135,29 @@ class AccountUpdate extends Component {
           />
           <Button
             title="Account Update"
-            onClick={this.handleUpdateAccount}
+            onClick={isFeeDelegation ? this.signTransaction : this.updateAccount}
           />
+          {senderRawTransaction && (
+            <Message
+              type="rawTransaction"
+              message={JSON.stringify(senderRawTransaction)}
+            />
+          )}
         </div>
-        <TxResult
-          txHash={txHash}
-          receipt={receipt}
-          error={error}
-        />
+        {isFeeDelegation
+          ? (
+            <FeeDelegation
+              senderRawTransaction={senderRawTransaction}
+              feePayerAddress={from}
+            />
+          )
+          : (
+            <TxResult
+              txHash={txHash}
+              receipt={receipt}
+              error={error}
+            />
+          )}
       </div>
     )
   }

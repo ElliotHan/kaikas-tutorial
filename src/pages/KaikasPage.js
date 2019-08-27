@@ -26,6 +26,7 @@ const txTypeList = [
   'Token Transfer (Fee Delegation)',
   'Token Transfer (Fee Delegation with Ratio)',
   'Account Update',
+  'Account Update (Fee Delegation)',
   'Contract Example: Count App',
 ]
 
@@ -47,17 +48,15 @@ class KaikasPage extends Component {
   }
 
   setAccountInfo = async (provider) => {
-    console.log('provider', provider)
     const account = provider.selectedAddress
     const balance = await this.caver.klay.getBalance(account)
-    console.log('1', this.state)
     this.setState({
       account,
       balance: this.caver.utils.fromPeb(balance, 'KLAY'),
     })
-    console.log('2', this.state)
   }
 
+  // TODO: Internet no connection
   setNetworkInfo = () => {
     const { klaytn } = window
     if(klaytn === undefined) return
@@ -74,7 +73,6 @@ class KaikasPage extends Component {
       this.caver = new Caver(klaytn)
       try {
         await klaytn.enable()
-        console.log(klaytn.selectedAddress)
         this.setAccountInfo(klaytn)
         klaytn.on('accountsChanged', () => this.setAccountInfo(klaytn))
       } catch (error) {
@@ -116,6 +114,8 @@ class KaikasPage extends Component {
         return <SmartContractExecutionFD from={from} feeRatio />
       case 'Account Update':
           return <AccountUpdate from={from} />
+      case 'Account Update (Fee Delegation)':
+          return <AccountUpdate from={from} isFeeDelegation />
       case 'Contract Example: Count App':
         return 'Count App Example'
       default:
