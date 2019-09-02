@@ -14,12 +14,19 @@ const Message = ({
         'Message--txHash': type === 'txHash',
         'Message--receipt': type === 'receipt',
         'Message--rawTransaction': type === 'rawTransaction',
+        'Message--signedMessage': type === 'signedMessage',        
       })}
     >
       <div className="Message__status">
         {type === 'error' && 'error'}
         {type === 'txHash' && 'txHash'}
         {type === 'receipt' && 'receipt'}
+        {type === 'signedMessage' && (
+          <Fragment>
+            Signed<br />
+            Message
+          </Fragment>
+        )}
         {type === 'rawTransaction' && (
           <Fragment>
             Signed<br />
