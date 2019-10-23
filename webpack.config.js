@@ -22,6 +22,7 @@ module.exports = {
   devtool: 'source-map',
   mode: 'development',
   entry: [
+    '@babel/polyfill',
     'react-hot-loader/patch',
     path.resolve(__dirname, 'src/index.js'),
     'webpack-hot-middleware/client',
