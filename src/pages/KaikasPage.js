@@ -12,6 +12,7 @@ import ValueTransferFD from 'components/ValueTransferFD'
 import SmartContractExecutionFD from 'components/SmartContractExecutionFD'
 import AccountUpdate from 'components/AccountUpdate'
 import SignTransaction from 'components/SignTransaction'
+import Cancel from 'components/Cancel'
 import SignMessage from 'components/SignMessage'
 
 import './KaikasPage.scss'
@@ -21,6 +22,7 @@ const txTypeList = [
   'Smart Contract Deploy',
   'Add Token',
   'Token Transfer',
+  'Cancel',
   'Sign Transaction',
   'Sign Message',
   'Value Transfer (Fee Delegation)',
@@ -104,6 +106,8 @@ class KaikasPage extends Component {
         return <SmartContractExecution from={from} />
       case 'Add Token':
           return <AddToken />
+      case 'Cancel':
+          return <Cancel from={from} />
       case 'Sign Transaction':
           return <SignTransaction from={from} />
       case 'Sign Message':
