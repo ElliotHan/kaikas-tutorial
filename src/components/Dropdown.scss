@@ -54,23 +54,27 @@
     color: $dark-brown;
     background-color: $light-grey;
   }
+  &:nth-child(5) { border-top: 1px solid $light-grey; }
   &:nth-child(7) { border-top: 1px solid $light-grey; }
-  &:nth-child(12) { border-top: 1px solid $light-grey; }
+  &:nth-child(13) { border-top: 1px solid $light-grey; }
+  &:nth-child(16) { border-top: 1px solid $light-grey; }
+  &:nth-child(22) { border-top: 1px solid $light-grey; }
+  &:nth-child(23) { border-top: 1px solid $light-grey; }
 
-  &:nth-child(7),
-  &:nth-child(8),
-  &:nth-child(9),
-  &:nth-child(10),
-  &:nth-child(11) {
-    &::before {
-      content: "";
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      background: center / contain url('/images/favicon@16.png');
-      margin-right: 7px;
-    }
-  }
+  // &:nth-child(7),
+  // &:nth-child(8),
+  // &:nth-child(9),
+  // &:nth-child(10),
+  // &:nth-child(11) {
+  //   &::before {
+  //     content: "";
+  //     display: inline-block;
+  //     width: 15px;
+  //     height: 15px;
+  //     background: center / contain url('/images/favicon@16.png');
+  //     margin-right: 7px;
+  //   }
+  // }
   &--white {
     color: $brown-grey;
     text-align: center;

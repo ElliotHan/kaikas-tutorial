@@ -5,16 +5,20 @@ import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
 
-import './SmartContractDeploy.scss'
+import './ValueTransfer.scss'
 
-class SmartContractDeploy extends Component {
+class ValueTransferLegacy extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
-      data: '',
-      value: 0,
+      to: '',
+      value: '',
       gas: '3000000',
+      txHash: null,
+      receipt: null,
+      error: null,
+      rawTransaction: null,
     }
   }
 
@@ -31,16 +35,16 @@ class SmartContractDeploy extends Component {
     })
   }
 
-  handleSmartContractDeploy = () => {
+  handleValueTransfer = () => {
     const caver = new Caver(klaytn)
-    const { from, data, gas, value } = this.state
-    
+    const { from, to, value, memo, gas } = this.state
+
     caver.klay.sendTransaction({
-      type: 'SMART_CONTRACT_DEPLOY',
       from,
-      data,
+      to,
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
+      data: memo,
       gas,
-      value,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -55,18 +59,24 @@ class SmartContractDeploy extends Component {
         this.setState({ error: error.message })
       })
   }
-  /**
-   * TODO
-   * example link : bytecode, contractAddress
-   * parameter input (token)
-   */
+
+  signTransaction = async () => {
+    const { from, to, value, memo, gas } = this.state
+    const { rawTransaction } = await caver.klay.signTransaction({
+      from,
+      to,
+      value,
+      data: memo,
+      gas,
+    })
+    this.setState({ rawTransaction })
+  }
+
   render() {
-    const { from, data, gas, value, txHash, receipt, error } = this.state
+    const { isFeeDelegation, rawTransaction } = this.props
+    const { from, to, value, gas, txHash, receipt, error } = this.state
     return (
-      <div className="SmartContractDeploy">
-        <p className="SmartContractDeploy__guide">
-          To get bytecode of contract, Use <a href="http://ide.klaytn.com/">Klaytn IDE</a> compile function
-        </p>
+      <div className="ValueTransfer">
         <Input
           name="from"
           label="From"
@@ -76,11 +86,11 @@ class SmartContractDeploy extends Component {
           readOnly
         />
         <Input
-          name="data"
-          label="Data (bytecode)"
-          value={data}
+          name="to"
+          label="To"
+          value={to}
           onChange={this.handleChange}
-          placeholder="A bytecode of smart contract to be deployed."
+          placeholder="To Address"
         />
         <Input
           name="value"
@@ -94,20 +104,29 @@ class SmartContractDeploy extends Component {
           label="Gas"
           value={gas}
           onChange={this.handleChange}
-          placeholder="Gas you willing to pay for contract deploy"
+          placeholder="Gas (Peb)"
         />
         <Button
-          title="Deploy Contract"
-          onClick={this.handleSmartContractDeploy}
+          title={isFeeDelegation ? 'Sign Transaction' : 'Send KLAY'}
+          onClick={this.handleValueTransfer}
+          // onClick={isFeeDelegation ? this.signTransaction : this.handleValueTransfer}
         />
-        <TxResult
-          txHash={txHash}
-          receipt={receipt}
-          error={error}
-        />
+        {rawTransaction && (
+          <Message
+            type="rawTransaction"
+            message={JSON.stringify(rawTransaction)}
+          />
+        )}
+        {!isFeeDelegation && (
+          <TxResult
+            txHash={txHash}
+            receipt={receipt}
+            error={error}
+          />
+        )}
       </div>
     )
   }
 }
 
-export default SmartContractDeploy
+export default ValueTransferLegacy

@@ -15,6 +15,7 @@ class AccountUpdate extends Component {
       from: props.from,
       publicKey: '',
       walletKey: '',
+      ratio: '',
       gas: 3000000,
       txHash: null,
       receipt: null,
@@ -44,14 +45,19 @@ class AccountUpdate extends Component {
   }
 
   signTransaction = async () => {
-    const { from, gas, publicKey } = this.state
+    const { from, gas, publicKey, ratio } = this.state
 
     const txData = {
-      type: 'FEE_DELEGATED_ACCOUNT_UPDATE',
+      type: this.props.feeRatio? 'FEE_DELEGATED_ACCOUNT_UPDATE_WITH_RATIO' : 'FEE_DELEGATED_ACCOUNT_UPDATE',
       from,
       publicKey,
       gas,
     }
+
+    if (this.props.feeRatio) {
+      txData.feeRatio = ratio
+    }
+
     const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
     this.setState({
       senderAddress: from,
@@ -88,6 +94,7 @@ class AccountUpdate extends Component {
       from,
       publicKey,
       walletKey,
+      ratio,
       gas,
       txHash,
       receipt,
@@ -133,6 +140,15 @@ class AccountUpdate extends Component {
             onChange={this.handleChange}
             placeholder="Gas"
           />
+          {this.props.feeRatio && (
+            <Input
+              name="ratio"
+              label="Fee Ratio"
+              value={ratio}
+              onChange={this.handleChange}
+              placeholder="Fee Ratio (%)"
+            />
+          )}
           <Button
             title="Account Update"
             onClick={isFeeDelegation ? this.signTransaction : this.updateAccount}
