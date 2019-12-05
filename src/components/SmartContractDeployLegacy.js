@@ -7,14 +7,16 @@ import TxResult from 'components/TxResult'
 
 import './SmartContractDeploy.scss'
 
-class SmartContractDeploy extends Component {
+class SmartContractDeployLegacy extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
       data: '',
-      value: 0,
       gas: '3000000',
+      txHash: null,
+      receipt: null,
+      error: null,
     }
   }
 
@@ -33,14 +35,12 @@ class SmartContractDeploy extends Component {
 
   handleSmartContractDeploy = () => {
     const caver = new Caver(klaytn)
-    const { from, data, gas, value } = this.state
+    const { from, data, gas } = this.state
     
     caver.klay.sendTransaction({
-      type: 'SMART_CONTRACT_DEPLOY',
       from,
       data,
       gas,
-      value,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -61,7 +61,7 @@ class SmartContractDeploy extends Component {
    * parameter input (token)
    */
   render() {
-    const { from, data, gas, value, txHash, receipt, error } = this.state
+    const { from, data, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractDeploy">
         <p className="SmartContractDeploy__guide">
@@ -81,13 +81,6 @@ class SmartContractDeploy extends Component {
           value={data}
           onChange={this.handleChange}
           placeholder="A bytecode of smart contract to be deployed."
-        />
-        <Input
-          name="value"
-          label="Value"
-          value={value}
-          onChange={this.handleChange}
-          placeholder="Value (KLAY)"
         />
         <Input
           name="gas"
@@ -110,4 +103,4 @@ class SmartContractDeploy extends Component {
   }
 }
 
-export default SmartContractDeploy
+export default SmartContractDeployLegacy

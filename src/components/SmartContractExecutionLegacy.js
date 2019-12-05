@@ -7,7 +7,7 @@ import TxResult from 'components/TxResult'
 
 import './SmartContractExecution.scss'
 
-class SmartContractExecution extends Component {
+class SmartContractExecutionLegacy extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -51,7 +51,6 @@ class SmartContractExecution extends Component {
     }, [to, caver.utils.toPeb(amount, 'KLAY')])
 
     caver.klay.sendTransaction({
-      type: 'SMART_CONTRACT_EXECUTION',
       from,
       to: contractAddress,
       data,
@@ -136,4 +135,4 @@ class SmartContractExecution extends Component {
   }
 }
 
-export default SmartContractExecution
+export default SmartContractExecutionLegacy

@@ -11,7 +11,8 @@ class SignTransaction extends Component {
     this.state = {
       from: props.from,
       to: '',
-      memo: '',
+      value: '',
+      data: '',
       gas: '3000000',
       rawTransaction: null,
     }
@@ -31,12 +32,13 @@ class SignTransaction extends Component {
   }
 
   signTransaction = async () => {
-    const { from, to, memo, gas } = this.state
+    const { from, to, data, gas, value } = this.state
     const { rawTransaction } = await caver.klay.signTransaction({
       from,
       to,
-      data: memo,
+      data: data,
       gas,
+      value,
     })
     this.setState({ rawTransaction })
   }
@@ -45,7 +47,8 @@ class SignTransaction extends Component {
     const {
       from,
       to,
-      memo,
+      data,
+      value,
       gas,
       rawTransaction,
     } = this.state
@@ -68,11 +71,18 @@ class SignTransaction extends Component {
             placeholder="To Address"
           />
           <Input
-            name="memo"
-            label="Memo"
-            value={memo}
+            name="value"
+            label="Value"
+            value={value}
             onChange={this.handleChange}
-            placeholder="Memo"
+            placeholder="Value (KLAY)"
+          />
+          <Input
+            name="data"
+            label="Data"
+            value={data}
+            onChange={this.handleChange}
+            placeholder="Data"
           />
           <Input
             name="gas"

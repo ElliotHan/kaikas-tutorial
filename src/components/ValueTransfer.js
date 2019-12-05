@@ -14,6 +14,7 @@ class ValueTransfer extends Component {
       from: props.from,
       to: '',
       value: '',
+      memo: '',
       gas: '3000000',
       txHash: null,
       receipt: null,
@@ -40,6 +41,7 @@ class ValueTransfer extends Component {
     const { from, to, value, memo, gas } = this.state
 
     caver.klay.sendTransaction({
+      type: this.props.isMemo ? 'VALUE_TRANSFER_MEMO' : 'VALUE_TRANSFER',
       from,
       to,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
@@ -59,23 +61,10 @@ class ValueTransfer extends Component {
         this.setState({ error: error.message })
       })
   }
-
-  signTransaction = async () => {
-    const { from, to, value, memo, gas } = this.state
-    const { rawTransaction } = await caver.klay.signTransaction({
-      type: this.props.isMemo ? 'FEE_DELEGATED_VALUE_TRANSFER_MEMO' : 'FEE_DELEGATED_VALUE_TRANSFER_WITH_RATIO',
-      from,
-      to,
-      value,
-      data: memo,
-      gas,
-    })
-    this.setState({ rawTransaction })
-  }
-
+  
   render() {
     const { isFeeDelegation, rawTransaction } = this.props
-    const { from, to, value, gas, txHash, receipt, error } = this.state
+    const { from, to, value, gas, memo, txHash, receipt, error } = this.state
     return (
       <div className="ValueTransfer">
         <Input
@@ -100,6 +89,15 @@ class ValueTransfer extends Component {
           onChange={this.handleChange}
           placeholder="Value (KLAY)"
         />
+        {this.props.isMemo && (
+          <Input
+            name="memo"
+            label="Memo"
+            value={memo}
+            onChange={this.handleChange}
+            placeholder="Memo"
+          />
+        )}
         <Input
           name="gas"
           label="Gas"
