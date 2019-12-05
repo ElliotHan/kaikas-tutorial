@@ -40,13 +40,15 @@ class ValueTransfer extends Component {
     const caver = new Caver(klaytn)
     const { from, to, value, memo, gas } = this.state
 
+    const dataMemo = memo === '' ? {} : { data: memo }
+
     caver.klay.sendTransaction({
       type: this.props.isMemo ? 'VALUE_TRANSFER_MEMO' : 'VALUE_TRANSFER',
       from,
       to,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
-      data: memo,
       gas,
+      ...dataMemo,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
