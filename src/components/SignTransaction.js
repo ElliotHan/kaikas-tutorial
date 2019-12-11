@@ -15,6 +15,7 @@ class SignTransaction extends Component {
       data: '',
       gas: '3000000',
       rawTransaction: null,
+      error: null,
     }
   }
 
@@ -32,15 +33,19 @@ class SignTransaction extends Component {
   }
 
   signTransaction = async () => {
-    const { from, to, data, gas, value } = this.state
-    const { rawTransaction } = await caver.klay.signTransaction({
-      from,
-      to,
-      data: data,
-      gas,
-      value,
-    })
-    this.setState({ rawTransaction })
+    try {
+      const { from, to, data, gas, value } = this.state
+      const { rawTransaction } = await caver.klay.signTransaction({
+        from,
+        to,
+        data: data,
+        gas,
+        value,
+      })
+      this.setState({ rawTransaction })
+    } catch(e) {
+      this.setState({ error: e.message })
+    }
   }
 
   render() {
@@ -50,6 +55,7 @@ class SignTransaction extends Component {
       data,
       value,
       gas,
+      error,
       rawTransaction,
     } = this.state
 
@@ -100,6 +106,12 @@ class SignTransaction extends Component {
             <Message
               type="rawTransaction"
               message={JSON.stringify(rawTransaction)}
+            />
+          )}
+          {error && (
+            <Message
+              type="error"
+              message={JSON.stringify(error)}
             />
           )}
         </div>
