@@ -49,6 +49,7 @@ const txTypeList = [
   'Token Transfer (Fee Delegation with Ratio)',
   'Cancel',
   'Cancel (Fee Delegation)',
+  'Cancel (Fee Delegation with Ratio)',
   'Contract Example: Count App',
 ]
 
@@ -134,6 +135,8 @@ class KaikasPage extends Component {
           return <Cancel from={from} />
       case 'Cancel (Fee Delegation)':
           return <CancelFD from={from} />
+      case 'Cancel (Fee Delegation with Ratio)':
+          return <CancelFD from={from} feeRatio/>
       case 'Value Transfer':
         return <ValueTransfer from={from} />
       case 'Value Transfer (Fee Delegation)':
