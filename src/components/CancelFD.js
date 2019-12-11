@@ -11,6 +11,7 @@ class CancelFD extends Component {
     this.state = {
       from: props.from,
       nonce: null,
+      ratio: '',
       senderAddress: '',
       senderRawTransaction: null,
       // txHash: null,
@@ -34,25 +35,29 @@ class CancelFD extends Component {
 
   handelSignTransaction = async() => {
     const caver = new Caver(klaytn)
-    const { from, nonce } = this.state
+    const { from, nonce, ratio } = this.state
+    const { feeRatio } = this.props
 
-      const txData = {
-        type: 'FEE_DELEGATED_CANCEL',
-        from,
-        nonce,
-        gas: '300000',
-      }
-  
-      const { rawTransaction: senderRawTransaction} = await caver.klay.signTransaction(txData)
-  
-      this.setState({
-        senderAddress: from,
-        senderRawTransaction
-      })
+    const renderFeeRatio = feeRatio ? { feeRatio: ratio } : {}
+
+    const txData = {
+      type: feeRatio? 'FEE_DELEGATED_CANCEL_WITH_RATIO' : 'FEE_DELEGATED_CANCEL',
+      from,
+      nonce,
+      gas: '300000',
+      ...renderFeeRatio,
+    }
+
+    const { rawTransaction: senderRawTransaction} = await caver.klay.signTransaction(txData)
+
+    this.setState({
+      senderAddress: from,
+      senderRawTransaction
+    })
   }
 
   render() {
-    const { from, nonce, senderRawTransaction } = this.state
+    const { from, nonce, ratio, senderRawTransaction } = this.state
     return (
       <div className="ValueTransfer">
         <h3>Sender</h3>
@@ -71,6 +76,15 @@ class CancelFD extends Component {
           onChange={this.handleChange}
           placeholder="Nonce to cancel transaction"
         />
+        {this.props.feeRatio  && (
+          <Input
+            name="ratio"
+            label="Fee Ratio"
+            value={ratio}
+            onChange={this.handleChange}
+            placeholder="Fee Ratio (%)"
+          />
+        )}
         <Button
           title="Sign Transaction"
           onClick={this.handelSignTransaction}
