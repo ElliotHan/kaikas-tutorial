@@ -19,6 +19,7 @@ import AccountUpdate from 'components/AccountUpdate'
 import SignTransaction from 'components/SignTransaction'
 import SendSignedTransaction from 'components/SendSignedTransaction'
 import Cancel from 'components/Cancel'
+import CancelFD from 'components/CancelFD'
 import SignMessage from 'components/SignMessage'
 
 import './KaikasPage.scss'
@@ -47,6 +48,7 @@ const txTypeList = [
   'Token Transfer (Fee Delegation)',
   'Token Transfer (Fee Delegation with Ratio)',
   'Cancel',
+  'Cancel (Fee Delegation)',
   'Contract Example: Count App',
 ]
 
@@ -130,6 +132,8 @@ class KaikasPage extends Component {
           return <SignMessage from={from} />
       case 'Cancel':
           return <Cancel from={from} />
+      case 'Cancel (Fee Delegation)':
+          return <CancelFD from={from} />
       case 'Value Transfer':
         return <ValueTransfer from={from} />
       case 'Value Transfer (Fee Delegation)':
