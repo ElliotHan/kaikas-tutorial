@@ -30,8 +30,8 @@ const txTypeList = [
   'Token Transfer (Legacy)',
   'Add Token',
   'Sign Message',
-  'Sign Transaction',
-  'Send Signed Transaction',
+  // 'Sign Transaction',
+  // 'Send Signed Transaction',
   'Value Transfer',
   'Value Transfer (Fee Delegation)',
   'Value Transfer (Fee Delegation with Ratio)',
@@ -47,10 +47,10 @@ const txTypeList = [
   'Token Transfer',
   'Token Transfer (Fee Delegation)',
   'Token Transfer (Fee Delegation with Ratio)',
-  'Cancel',
-  'Cancel (Fee Delegation)',
-  'Cancel (Fee Delegation with Ratio)',
-  'Contract Example: Count App',
+  // 'Cancel',
+  // 'Cancel (Fee Delegation)',
+  // 'Cancel (Fee Delegation with Ratio)',
+  // 'Contract Example: Count App',
 ]
 
 class KaikasPage extends Component {
@@ -125,18 +125,18 @@ class KaikasPage extends Component {
         return <SmartContractExecutionLegacy from={from} />
       case 'Add Token':
           return <AddToken />
-      case 'Sign Transaction':
-          return <SignTransaction from={from} />
-      case 'Send Signed Transaction':
-          return <SendSignedTransaction />
+      // case 'Sign Transaction':
+      //     return <SignTransaction from={from} />
+      // case 'Send Signed Transaction':
+      //     return <SendSignedTransaction />
       case 'Sign Message':
           return <SignMessage from={from} />
-      case 'Cancel':
-          return <Cancel from={from} />
-      case 'Cancel (Fee Delegation)':
-          return <CancelFD from={from} />
-      case 'Cancel (Fee Delegation with Ratio)':
-          return <CancelFD from={from} feeRatio/>
+      // case 'Cancel':
+      //     return <Cancel from={from} />
+      // case 'Cancel (Fee Delegation)':
+      //     return <CancelFD from={from} />
+      // case 'Cancel (Fee Delegation with Ratio)':
+      //     return <CancelFD from={from} feeRatio/>
       case 'Value Transfer':
         return <ValueTransfer from={from} />
       case 'Value Transfer (Fee Delegation)':
@@ -167,10 +167,10 @@ class KaikasPage extends Component {
           return <AccountUpdate from={from} isFeeDelegation />
       case 'Account Update (Fee Delegation with Ratio)':
           return <AccountUpdate from={from} isFeeDelegation feeRatio />
-      case 'Contract Example: Count App':
-        return 'Count App Example'
+      // case 'Contract Example: Count App':
+      //   return 'Count App Example'
       default:
-        return (<p className="KaikasPage__guide">Select A Transaction Example :)</p>)
+        return (<p className="KaikasPage__guide">Select a Transaction example :D</p>)
     }
   }
 
@@ -184,7 +184,7 @@ class KaikasPage extends Component {
           <div className="KaikasPage__content">
             <Dropdown
               className="KaikasPage__dropdown"
-              placeholder="Select Transaction type"
+              placeholder="Transaction type"
               selectedItem={txType}
               handleSelect={this.selectTxType}
               list={txTypeList}

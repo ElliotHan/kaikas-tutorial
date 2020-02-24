@@ -11,7 +11,7 @@ const Nav = ({ network }) => (
         <a href="/">
           <img
             src="images/logo-kaikas-tutorial.png"
-            alt="Klaystagram"
+            alt="Kaikas Tutorial"
           />
         </a>
       </h1>
