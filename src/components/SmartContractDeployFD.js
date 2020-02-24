@@ -13,7 +13,7 @@ class SmartContractExecutionFD extends Component {
     this.state = {
       from: props.from,
       data: '',
-      value: 0,
+      value: '',
       gas: '3000000',
       ratio: '',
     }
@@ -44,7 +44,7 @@ class SmartContractExecutionFD extends Component {
       from,
       data,
       gas,
-      value,
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
       ...renderFeeRatio,
     }
 

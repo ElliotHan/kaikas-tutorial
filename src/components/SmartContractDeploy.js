@@ -13,7 +13,7 @@ class SmartContractDeploy extends Component {
     this.state = {
       from: props.from,
       data: '',
-      value: 0,
+      value: '',
       gas: '3000000',
     }
   }
@@ -40,7 +40,7 @@ class SmartContractDeploy extends Component {
       from,
       data,
       gas,
-      value,
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
