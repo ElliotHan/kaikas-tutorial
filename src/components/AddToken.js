@@ -78,7 +78,7 @@ class AddToken extends Component {
           <h3 className="AddToken__title"># Custom Token</h3>
           <Input
             name="tokenAddress"
-            label="Token Address"
+            label="Token Contract Address"
             value={tokenAddress}
             onChange={this.handleChange}
             placeholder="Token Address"

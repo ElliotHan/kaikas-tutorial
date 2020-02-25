@@ -15,7 +15,7 @@ class SmartContractExecutionLegacy extends Component {
       to: '',
       amount: '',
       contractAddress: '',
-      gas: '',
+      gas: '3000000',
       txHash: null,
       receipt: null,
       error: null,

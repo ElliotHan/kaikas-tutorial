@@ -44,7 +44,7 @@ class ValueTransferFDR extends Component {
       from,
       to,
       feeRatio: ratio,
-      gas: '300000',
+      gas: '3000000',
       value: caver.utils.toPeb(value, 'KLAY'),
       ...dataMemo,
     }

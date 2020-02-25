@@ -45,11 +45,10 @@ class ValueTransferFD extends Component {
       type: this.props.isMemo ? 'FEE_DELEGATED_VALUE_TRANSFER_MEMO' : 'FEE_DELEGATED_VALUE_TRANSFER',
       from,
       to,
-      gas: '300000',
+      gas: '3000000',
       value: caver.utils.toPeb(value, 'KLAY'),
       ...dataMemo,
     }
-    console.log('txData', txData)
 
     const { rawTransaction: senderRawTransaction} = await caver.klay.signTransaction(txData)
 

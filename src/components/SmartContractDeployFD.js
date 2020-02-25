@@ -4,6 +4,7 @@ import Input from 'components/Input'
 import Button from 'components/Button'
 import FeeDelegation from 'components/FeeDelegation'
 import Message from 'components/Message'
+import BytecodeExample from 'components/BytecodeExample'
 
 import './SmartContractExecution.scss'
 
@@ -60,6 +61,7 @@ class SmartContractExecutionFD extends Component {
     const { from, data, gas, ratio, value, senderRawTransaction } = this.state
     return (
       <div className="SmartContractDeploy">
+        <BytecodeExample />
         <div className="SmartContractDeployFD__sender">
           <Input
             name="from"

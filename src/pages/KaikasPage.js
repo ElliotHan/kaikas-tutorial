@@ -64,7 +64,7 @@ class KaikasPage extends Component {
       network: null,
     }
   }
-  
+
   componentDidMount() {
     this.loadAccountInfo()
     this.setNetworkInfo()

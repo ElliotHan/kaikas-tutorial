@@ -4,6 +4,7 @@ import Caver from 'caver-js'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
+import BytecodeExample from 'components/BytecodeExample'
 
 import './SmartContractDeploy.scss'
 
@@ -64,9 +65,7 @@ class SmartContractDeployLegacy extends Component {
     const { from, data, gas, txHash, receipt, error } = this.state
     return (
       <div className="SmartContractDeploy">
-        <p className="SmartContractDeploy__guide">
-          To get bytecode of contract, Use <a href="http://ide.klaytn.com/">Klaytn IDE</a> compile function
-        </p>
+        <BytecodeExample />
         <Input
           name="from"
           label="From"
