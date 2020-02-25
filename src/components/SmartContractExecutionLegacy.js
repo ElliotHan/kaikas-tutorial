@@ -103,18 +103,18 @@ class SmartContractExecutionLegacy extends Component {
           placeholder="Address you want to send Token"
         />
         <Input
-          name="amount"
-          label="Amount"
-          value={amount}
-          onChange={this.handleChange}
-          placeholder="Amount of Eth you want to send"
-        />
-        <Input
           name="contractAddress"
           label="Contract Address (Token Address)"
           value={contractAddress}
           onChange={this.handleChange}
           placeholder="The address of the deployed smart contract"
+        />
+        <Input
+          name="amount"
+          label="Amount"
+          value={amount}
+          onChange={this.handleChange}
+          placeholder="Amount of Eth you want to send"
         />
         <Input
           name="gas"
