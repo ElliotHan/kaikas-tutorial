@@ -11,7 +11,7 @@
   "scripts": {
     "build": "webpack --config ./webpack.prod.js",
     "start": "node ./scripts/server.js",
-    "start:local": "webpack-dev-server --config webpack.dev.js"
+    "local": "webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git"
