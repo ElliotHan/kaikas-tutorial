@@ -83,7 +83,9 @@ class SmartContractExecutionLegacy extends Component {
     return (
       <div className="SmartContractExecution">
         <p className="SmartContractExecution__guide">
-          Will send a transaction to the smart contract and execute its method. Note that this can alter the smart contract state.
+          * Ryan token: 0x453b77027874071b9f85742052006db4c97e9278
+          <br />
+          * Apeach token: 0x1543cd6bf3097ba0b5a6d8c6f0c74ae7564bfcdb
         </p>
         <Input
           name="from"

@@ -19,7 +19,6 @@ const WalletInfo = ({ address, balance }) => {
           <span className="WalletInfo__label">Balance</span>
           <span className="WalletInfo__balance">{balance}</span>
           <span className="WalletInfo__unit">KLAY</span>
-          <button>새로고침</button>
         </div>
       </div>
       <p className="WalletInfo__faucet">
