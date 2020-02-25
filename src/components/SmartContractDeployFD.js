@@ -14,7 +14,7 @@ class SmartContractExecutionFD extends Component {
     this.state = {
       from: props.from,
       data: '',
-      value: '',
+      value: 0,
       gas: '3000000',
       ratio: '',
     }
