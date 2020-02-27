@@ -1,4 +1,5 @@
 # kaikas-tutorial
+> https://kaikas-tutorial.dev.klaytn.com/
 
 ```
 - Engineer: 김보영(bong)
@@ -26,3 +27,13 @@ $ npm run local
 
 ## 상세기획 및 진행상황
 https://groundx.atlassian.net/wiki/spaces/TEC/pages/edit/294519330?draftId=294453784&draftShareId=d67961b3-edec-486a-bee9-f1ae133da1e3&
+
+## Deployment process
+
+1. Create and work with branches by function
+2. Code review from ground-x develop team
+3. Merge to master branch after Code review (Squash merge)
+4. After merge, it deploy to production
+5. You can see deploy workflow in real time on [kaikas-tutorial cicleCI](https://circleci.com/gh/ground-x/kaikas-tutorial)
+
+> Reference: [Static Site deploy process](https://groundx.atlassian.net/wiki/spaces/PG/pages/325615878/Static+Site+deploy+process)
