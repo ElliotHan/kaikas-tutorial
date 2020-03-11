@@ -53,6 +53,13 @@ const txTypeList = [
   // 'Contract Example: Count App',
 ]
 
+
+// Request to publicEN
+window.caver2 = new Caver('https://api.baobab.klaytn.net:8651/')
+// Request to Kaikas
+window.caver3 = new Caver(window.klaytn)
+
+caver2.klay.accounts.wallet.add('0x69c39db1ada4dc95e6cdd80e8fc7a76a34de07db650502d4ec3e373af80243d30x000x0a27b3c3e8ff6d01ca63fa44ac8c7eab9a3db187')
 class KaikasPage extends Component {
   constructor(props) {
     super(props)
