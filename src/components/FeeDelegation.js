@@ -11,21 +11,22 @@ class FeeDelegation extends PureComponent {
     super(props)
     this.state = {
       feePayerAddress: props.feePayerAddress,
-      feePayerPrivateKey: '0x7a9e8024d21e60f17bc095ac7e5d35384c2c9bc1eb07f407f43652736327037e',
+      feePayerPrivateKey: '',
       txHash: null,
       receipt: null,
       error: null,
     }
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.feePayerAddress !== prevState.feePayerAddress) {
-      return { feePayerAddress: nextProps.feePayerAddress }
-    }
-    return null
-  }
+  // static getDerivedStateFromProps = (nextProps, prevState) => {
+  //   if (nextProps.feePayerAddress !== prevState.feePayerAddress) {
+  //     return { feePayerAddress: nextProps.feePayerAddress }
+  //   }
+  //   return null
+  // }
 
   handleChange = (e) => {
+    console.warn('e', e.target.value)
     this.setState({
       [e.target.name]: e.target.value,
     })
