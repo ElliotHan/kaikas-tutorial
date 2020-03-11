@@ -124,7 +124,7 @@ class AccountUpdate extends Component {
             label="From"
             value={from}
             placeholder="Login with Kaikas :)"
-            readOnly
+            onChange={this.handleChange}
           />
           <Input
             name="publicKey"

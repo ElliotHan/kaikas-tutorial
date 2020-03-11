@@ -75,7 +75,6 @@ class ValueTransfer extends Component {
           value={from}
           onChange={this.handleChange}
           placeholder="From Address"
-          readOnly
         />
         <Input
           name="to"

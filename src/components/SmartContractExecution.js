@@ -86,7 +86,6 @@ class SmartContractExecution extends Component {
           value={from}
           onChange={this.handleChange}
           placeholder="Account you logged in metamask"
-          readOnly
         />
         <Input
           name="to"

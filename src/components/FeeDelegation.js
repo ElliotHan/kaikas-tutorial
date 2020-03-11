@@ -25,11 +25,11 @@ class FeeDelegation extends PureComponent {
     return null
   }
 
-  // handleChange = (e) => {
-  //   this.setState({
-  //     [e.target.name]: e.target.value,
-  //   })
-  // }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
 
   sendTransaction = () => {
     const { feePayerAddress, feePayerPrivateKey } = this.state
@@ -62,9 +62,8 @@ class FeeDelegation extends PureComponent {
           name="feePayerAddress"
           label="Fee Payer Address"
           value={feePayerAddress}
-          // onChange={this.handleChange}
+          onChange={this.handleChange}
           placeholder="Fee Payer Address"
-          readOnly
         />
         {/* <Input
           name="feePayerPrivateKey"

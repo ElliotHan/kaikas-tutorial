@@ -78,7 +78,7 @@ class ValueTransferFDR extends Component {
             label="From"
             value={senderAddress || from}
             placeholder="From Address"
-            readOnly
+            onChange={this.handleChange}
           />
           <Input
             name="to"

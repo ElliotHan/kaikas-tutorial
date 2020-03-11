@@ -68,7 +68,7 @@ class SmartContractExecutionFD extends Component {
             label="From (Sender Address)"
             value={from}
             placeholder="From Address"
-            readOnly
+            onChange={this.handleChange}
           />
           <Input
             name="data"

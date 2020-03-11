@@ -49,7 +49,7 @@ class SignMessage extends Component {
             label="From"
             value={from}
             placeholder="From Address"
-            readOnly
+            onChange={this.handleChange}
           />
           <Input
             name="message"

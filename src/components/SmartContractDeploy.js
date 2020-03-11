@@ -68,7 +68,7 @@ class SmartContractDeploy extends Component {
           value={from}
           onChange={this.handleChange}
           placeholder="From Address"
-          readOnly
+          onChange={this.handleChange}
         />
         <Input
           name="data"
