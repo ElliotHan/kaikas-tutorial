@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
-import TxResult from 'components/TxResult'
+import Message from 'components/Message'
+import FeeDelegation from './FeeDelegation';
 
 import './AccountUpdate.scss'
 
-class AccountUpdate extends Component {
+class AccountUpdateFD extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,18 +15,16 @@ class AccountUpdate extends Component {
       publicKey: '',
       walletKey: '',
       gas: 3000000,
-      txHash: null,
-      receipt: null,
-      error: null,
+      senderRawTransaction: null,
     }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   if (nextProps.from !== prevState.from) {
-  //     return { from: nextProps.from }
-  //   }
-  //   return null
-  // }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.from !== prevState.from) {
+      return { from: nextProps.from }
+    }
+    return null
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -40,34 +39,29 @@ class AccountUpdate extends Component {
     this.setState({ publicKey, walletKey })
   }
 
-  signTransaction = () => {
-    const { from, gas, publicKey } = this.state
+  signTransaction = async () => {
+    const { from, publicKey, gas } = this.state
 
-    caver.klay.sendTransaction({
-      type: 'ACCOUNT_UPDATE',
+    const txData = {
+      type: 'FEE_DELEGATED_ACCOUNT_UPDATE',
       from,
       publicKey,
       gas,
+    }
+
+    const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
+
+    this.setState({
+      senderAddress: from,
+      senderRawTransaction,
     })
-      .once('transactionHash', (transactionHash) => {
-          console.log('txHash', transactionHash)
-          this.setState({ txHash: transactionHash })
-      })
-      .once('receipt', (receipt) => {
-          console.log('receipt', receipt)
-          this.setState({ receipt: JSON.stringify(receipt) })
-      })
-      .once('error', (error) => {
-          console.log('error', error)
-          this.setState({ error: error.message })
-      })
   }
 
   render() {
-    const { from, publicKey, walletKey, gas, txHash, receipt, error } = this.state
+    const { from, publicKey, walletKey, ratio, gas, senderRawTransaction } = this.state
 
     return (
-      <div className="AccountUpdate">
+      <div className="AccountUpdateFD">
         <div className="AccountUpdate__generateKeypair">
           <Button
             className="AccountUpdate__generateButton"
@@ -108,15 +102,20 @@ class AccountUpdate extends Component {
             title="Sign Transaction"
             onClick={this.signTransaction}
           />
+          {senderRawTransaction && (
+            <Message
+              type="rawTransaction"
+              message={JSON.stringify(senderRawTransaction)}
+            />
+          )}
         </div>
-        <TxResult
-          txHash={txHash}
-          receipt={receipt}
-          error={error}
+        <FeeDelegation
+          senderRawTransaction={senderRawTransaction}
+          feePayerAddress={from}
         />
       </div>
     )
   }
 }
 
-export default AccountUpdate
+export default AccountUpdateFD

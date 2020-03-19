@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
-import FeeDelegation from 'components/FeeDelegation'
 import Message from 'components/Message'
+import FeeDelegation from 'components/FeeDelegation'
 
-class CancelFD extends Component {
+class ValueTransferMemoFD extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
-      nonce: null,
-      ratio: '',
+      to: '',
+      value: '',
+      memo: '',
+      gas: 3000000,
       senderAddress: '',
       senderRawTransaction: null,
-      // txHash: null,
-      // receipt: null,
-      // error: null,
     }
   }
 
@@ -33,19 +32,16 @@ class CancelFD extends Component {
     })
   }
 
-  handelSignTransaction = async() => {
-    const caver = new Caver(klaytn)
-    const { from, nonce, ratio } = this.state
-    const { feeRatio } = this.props
-
-    const renderFeeRatio = feeRatio ? { feeRatio: ratio } : {}
+  handleSignTransaction = async () => {
+    const { from, to, value, memo, gas } = this.state
 
     const txData = {
-      type: feeRatio? 'FEE_DELEGATED_CANCEL_WITH_RATIO' : 'FEE_DELEGATED_CANCEL',
+      type: 'FEE_DELEGATED_VALUE_TRANSFER_MEMO',
       from,
-      nonce,
-      gas: '300000',
-      ...renderFeeRatio,
+      to,
+      gas,
+      value: caver.utils.toPeb(value, 'KLAY'),
+      data: memo,
     }
 
     const { rawTransaction: senderRawTransaction} = await caver.klay.signTransaction(txData)
@@ -57,37 +53,49 @@ class CancelFD extends Component {
   }
 
   render() {
-    const { from, nonce, ratio, senderRawTransaction } = this.state
+    const { from, to, value, memo, gas, senderAddress, senderRawTransaction } = this.state
+
     return (
-      <div className="ValueTransfer">
+      <div className="ValueTransferMemoFD">
         <h3>Sender</h3>
         <Input
           name="from"
           label="From"
-          value={from}
-          onChange={this.handleChange}
+          value={senderAddress || from}
           placeholder="From Address"
-          readOnly
+          onChange={this.handleChange}
         />
         <Input
-          name="nonce"
-          label="Nonce"
-          value={nonce}
+          name="to"
+          label="To"
+          value={to}
           onChange={this.handleChange}
-          placeholder="Nonce to cancel transaction"
+          placeholder="To Address"
         />
-        {this.props.feeRatio  && (
-          <Input
-            name="ratio"
-            label="Fee Ratio"
-            value={ratio}
-            onChange={this.handleChange}
-            placeholder="Fee Ratio (%)"
-          />
-        )}
+        <Input
+          name="value"
+          label="Value"
+          value={value}
+          onChange={this.handleChange}
+          placeholder="Value (KLAY)"
+        />
+        <Input
+          name="memo"
+          label="Memo"
+          value={memo}
+          onChange={this.handleChange}
+          placeholder="Memo"
+        />
+        <Input
+          name="gas"
+          label="Gas"
+          value={gas}
+          onChange={this.handleChange}
+          placeholder="Gas (Peb)"
+        />
         <Button
           title="Sign Transaction"
-          onClick={this.handelSignTransaction}
+          onClick={this.handleSignTransaction}
         />
         {senderRawTransaction && (
           <Message
@@ -104,4 +112,4 @@ class CancelFD extends Component {
   }
 }
 
-export default CancelFD
+export default ValueTransferMemoFD

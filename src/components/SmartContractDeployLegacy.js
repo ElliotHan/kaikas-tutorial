@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
-
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
 import BytecodeExample from 'components/BytecodeExample'
-
-import './SmartContractDeploy.scss'
 
 class SmartContractDeployLegacy extends Component {
   constructor(props) {
@@ -14,7 +11,7 @@ class SmartContractDeployLegacy extends Component {
     this.state = {
       from: props.from,
       data: '',
-      gas: '3000000',
+      gas: 3000000,
       txHash: null,
       receipt: null,
       error: null,
@@ -35,7 +32,6 @@ class SmartContractDeployLegacy extends Component {
   }
 
   handleSmartContractDeploy = () => {
-    const caver = new Caver(klaytn)
     const { from, data, gas } = this.state
     
     caver.klay.sendTransaction({
@@ -56,15 +52,12 @@ class SmartContractDeployLegacy extends Component {
         this.setState({ error: error.message })
       })
   }
-  /**
-   * TODO
-   * example link : bytecode, contractAddress
-   * parameter input (token)
-   */
+
   render() {
     const { from, data, gas, txHash, receipt, error } = this.state
+
     return (
-      <div className="SmartContractDeploy">
+      <div className="SmartContractDeployLegacy">
         <BytecodeExample />
         <Input
           name="from"

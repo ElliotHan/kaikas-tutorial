@@ -4,28 +4,28 @@ import Input from 'components/Input'
 import Button from 'components/Button'
 import Message from 'components/Message'
 import FeeDelegation from 'components/FeeDelegation'
+import BytecodeExample from 'components/BytecodeExample'
 
-
-class SmartContractExecutionFD extends Component {
+class SmartContractDeployFDRatio extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
-      to: '',
-      amount: '',
-      contractAddress: '',
+      data: '',
+      value: 0,
+      ratio: '',
       gas: 3000000,
       senderAddress: '',
       senderRawTransaction: null,
     }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   if (nextProps.from !== prevState.from) {
-  //     return { from: nextProps.from }
-  //   }
-  //   return null
-  // }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.from !== prevState.from) {
+      return { from: nextProps.from }
+    }
+    return null
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -34,26 +34,15 @@ class SmartContractExecutionFD extends Component {
   }
 
   signTransaction = async () => {
-    const { from, to, amount, contractAddress, gas } = this.state
-
-    const data = caver.klay.abi.encodeFunctionCall({
-      name: 'transfer',
-      type: 'function',
-      inputs: [{
-        type: 'address',
-        name: 'recipient',
-      }, {
-        type: 'uint256',
-        name: 'amount',
-      }],
-    }, [to, caver.utils.toPeb(amount, 'KLAY')])
+    const { from, data, value, ratio, gas } = this.state
 
     const txData = {
-      type: 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION',
+      type: 'FEE_DELEGATED_SMART_CONTRACT_DEPLOY_WITH_RATIO',
       from,
-      to: contractAddress,
-      gas,
       data,
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
+      feeRatio: ratio,
+      gas,
     }
 
     const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
@@ -65,10 +54,12 @@ class SmartContractExecutionFD extends Component {
   }
 
   render() {
-    const { from, to, amount, contractAddress, gas, senderRawTransaction } = this.state
+    const { from, data, value, ratio, gas, senderRawTransaction } = this.state
 
     return (
-      <div className="SmartContractExecutionFD">
+      <div className="SmartContractDeployFDRatio">
+        <BytecodeExample />
+        <h3>Sender</h3>
         <Input
           name="from"
           label="From (Sender Address)"
@@ -77,32 +68,32 @@ class SmartContractExecutionFD extends Component {
           onChange={this.handleChange}
         />
         <Input
-          name="to"
-          label="To"
-          value={to}
+          name="data"
+          label="Data (bytecode)"
+          value={data}
           onChange={this.handleChange}
-          placeholder="Address you want to send Token"
+          placeholder="A bytecode of smart contract to be deployed."
         />
         <Input
-          name="contractAddress"
-          label="Contract Address (Token Address)"
-          value={contractAddress}
+          name="value"
+          label="Value"
+          value={value}
           onChange={this.handleChange}
-          placeholder="The address of the deployed smart contract"
+          placeholder="Value (KLAY)"
         />
         <Input
-          name="amount"
-          label="Amount"
-          value={amount}
+          name="ratio"
+          label="Fee Ratio"
+          value={ratio}
           onChange={this.handleChange}
-          placeholder="Amount of Eth you want to send"
+          placeholder="Fee Ratio (%)"
         />
         <Input
           name="gas"
           label="Gas"
           value={gas}
           onChange={this.handleChange}
-          placeholder="Gas"
+          placeholder="Gas you willing to pay for contract deploy"
         />
         <Button
           title="Sign Transaction"
@@ -123,4 +114,4 @@ class SmartContractExecutionFD extends Component {
   }
 }
 
-export default SmartContractExecutionFD
+export default SmartContractDeployFDRatio

@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
-
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
-
-import './ValueTransfer.scss'
 
 class ValueTransferLegacy extends Component {
   constructor(props) {
@@ -14,7 +11,7 @@ class ValueTransferLegacy extends Component {
       from: props.from,
       to: '',
       value: '',
-      gas: '3000000',
+      gas: 3000000,
       txHash: null,
       receipt: null,
       error: null,
@@ -35,15 +32,13 @@ class ValueTransferLegacy extends Component {
     })
   }
 
-  handleValueTransfer = () => {
-    const caver = new Caver(klaytn)
-    const { from, to, value, memo, gas } = this.state
+  signTransaction = () => {
+    const { from, to, value, gas } = this.state
 
     caver.klay.sendTransaction({
       from,
       to,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
-      data: memo,
       gas,
     })
       .once('transactionHash', (transactionHash) => {
@@ -60,23 +55,11 @@ class ValueTransferLegacy extends Component {
       })
   }
 
-  signTransaction = async () => {
-    const { from, to, value, memo, gas } = this.state
-    const { rawTransaction } = await caver.klay.signTransaction({
-      from,
-      to,
-      value,
-      data: memo,
-      gas,
-    })
-    this.setState({ rawTransaction })
-  }
-
   render() {
-    const { isFeeDelegation, rawTransaction } = this.props
     const { from, to, value, gas, txHash, receipt, error } = this.state
+
     return (
-      <div className="ValueTransfer">
+      <div className="ValueTransferLegacy">
         <Input
           name="from"
           label="From"
@@ -106,23 +89,14 @@ class ValueTransferLegacy extends Component {
           placeholder="Gas (Peb)"
         />
         <Button
-          title={isFeeDelegation ? 'Sign Transaction' : 'Send KLAY'}
-          onClick={this.handleValueTransfer}
-          // onClick={isFeeDelegation ? this.signTransaction : this.handleValueTransfer}
+          title="Sign Transaction"
+          onClick={this.signTransaction}
         />
-        {rawTransaction && (
-          <Message
-            type="rawTransaction"
-            message={JSON.stringify(rawTransaction)}
-          />
-        )}
-        {!isFeeDelegation && (
-          <TxResult
-            txHash={txHash}
-            receipt={receipt}
-            error={error}
-          />
-        )}
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

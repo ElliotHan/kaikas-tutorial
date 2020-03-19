@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
-
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
 import BytecodeExample from 'components/BytecodeExample'
-
-import './SmartContractDeploy.scss'
 
 class SmartContractDeploy extends Component {
   constructor(props) {
@@ -15,7 +12,10 @@ class SmartContractDeploy extends Component {
       from: props.from,
       data: '',
       value: 0,
-      gas: '3000000',
+      gas: 3000000,
+      txHash: null,
+      receipt: null,
+      error: null,
     }
   }
 
@@ -32,16 +32,15 @@ class SmartContractDeploy extends Component {
     })
   }
 
-  handleSmartContractDeploy = () => {
-    const caver = new Caver(klaytn)
-    const { from, data, gas, value } = this.state
-    
+  signTransaction = () => {
+    const { from, data, value, gas } = this.state
+
     caver.klay.sendTransaction({
       type: 'SMART_CONTRACT_DEPLOY',
       from,
       data,
-      gas,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
+      gas,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -58,7 +57,8 @@ class SmartContractDeploy extends Component {
   }
 
   render() {
-    const { from, data, gas, value, txHash, receipt, error } = this.state
+    const { from, data, value, gas, txHash, receipt, error } = this.state
+
     return (
       <div className="SmartContractDeploy">
         <BytecodeExample />
@@ -92,8 +92,8 @@ class SmartContractDeploy extends Component {
           placeholder="Gas you willing to pay for contract deploy"
         />
         <Button
-          title="Deploy Contract"
-          onClick={this.handleSmartContractDeploy}
+          title="Sign Transaction"
+          onClick={this.signTransaction}
         />
         <TxResult
           txHash={txHash}

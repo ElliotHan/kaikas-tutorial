@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
 
-class Cancel extends Component {
+class ValueTransfer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
-      nonce: null,
+      to: '',
+      value: '',
+      memo: '',
+      gas: 3000000,
       txHash: null,
       receipt: null,
       error: null,
+      rawTransaction: null,
     }
   }
 
@@ -29,14 +33,17 @@ class Cancel extends Component {
     })
   }
 
-  handleCancel = () => {
-    const caver = new Caver(klaytn)
-    const { from, nonce } = this.state
+  handleValueTransfer = () => {
+    const { from, to, value, memo, gas } = this.state
+
+
     caver.klay.sendTransaction({
-      type: 'CANCEL',
+      type: 'VALUE_TRANSFER_MEMO',
       from,
-      nonce,
-      gas: '300000',
+      to,
+      value: caver.utils.toPeb(value.toString(), 'KLAY'),
+      gas,
+      data: memo,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -51,37 +58,50 @@ class Cancel extends Component {
         this.setState({ error: error.message })
       })
   }
-
+  
   render() {
-    const { isFeeDelegation, rawTransaction } = this.props
-    const { from, nonce, txHash, receipt, error } = this.state
+    const { from, to, value, gas, memo, txHash, receipt, error } = this.state
+
     return (
-      <div className="ValueTransfer">
+      <div className="ValueTransferMemo">
         <Input
           name="from"
           label="From"
           value={from}
           onChange={this.handleChange}
           placeholder="From Address"
-          readOnly
         />
         <Input
-          name="nonce"
-          label="Nonce"
-          value={nonce}
+          name="to"
+          label="To"
+          value={to}
           onChange={this.handleChange}
-          placeholder="Nonce to cancel transaction"
+          placeholder="To Address"
         />
-        {/* <Input
+        <Input
+          name="value"
+          label="Value"
+          value={value}
+          onChange={this.handleChange}
+          placeholder="Value (KLAY)"
+        />
+        <Input
+          name="memo"
+          label="Memo"
+          value={memo}
+          onChange={this.handleChange}
+          placeholder="Memo"
+        />
+        <Input
           name="gas"
           label="Gas"
           value={gas}
           onChange={this.handleChange}
           placeholder="Gas (Peb)"
-        /> */}
+        />
         <Button
-          title="Cancel Transaction"
-          onClick={this.handleCancel}
+          title="Sign Transaction"
+          onClick={this.handleValueTransfer}
         />
         <TxResult
           txHash={txHash}
@@ -93,4 +113,4 @@ class Cancel extends Component {
   }
 }
 
-export default Cancel
+export default ValueTransfer

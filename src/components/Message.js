@@ -4,12 +4,13 @@ import cx from 'classnames'
 import './Message.scss'
 
 const Message = ({
+  className,
   type,
   message,
 }) => {
   return (
     <div
-      className={cx('Message', {
+      className={cx('Message', className, {
         'Message--error': type === 'error',
         'Message--txHash': type === 'txHash',
         'Message--receipt': type === 'receipt',

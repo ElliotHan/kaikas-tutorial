@@ -4,8 +4,6 @@ import { KLAY_FAUCET } from 'constants/url'
 import './WalletInfo.scss'
 
 const WalletInfo = ({ address, balance }) => {
-  // TODO: Move logic for checking balance
-  console.log('address', address,'balance', balance)
   return (
     <div className="WalletInfo">
       <h2 className="WalletInfo__title">Wallet Information</h2>
@@ -13,7 +11,6 @@ const WalletInfo = ({ address, balance }) => {
         <div className="WalletInfo__info">
           <span className="WalletInfo__label">Wallet Address</span>
           {address || 'Login with Kaikas :)'}
-          {/* TODO: Copy button */}
         </div>
         <div className="WalletInfo__info">
           <span className="WalletInfo__label">Balance</span>

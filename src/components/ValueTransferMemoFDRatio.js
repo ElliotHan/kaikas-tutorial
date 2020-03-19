@@ -5,27 +5,27 @@ import Button from 'components/Button'
 import Message from 'components/Message'
 import FeeDelegation from 'components/FeeDelegation'
 
-
-class SmartContractExecutionFD extends Component {
+class ValueTransferMemoFDRatio extends Component {
   constructor(props) {
     super(props)
     this.state = {
       from: props.from,
       to: '',
-      amount: '',
-      contractAddress: '',
+      value: '',
+      memo: '',
+      ratio: '',
       gas: 3000000,
       senderAddress: '',
       senderRawTransaction: null,
     }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   if (nextProps.from !== prevState.from) {
-  //     return { from: nextProps.from }
-  //   }
-  //   return null
-  // }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.from !== prevState.from) {
+      return { from: nextProps.from }
+    }
+    return null
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -33,30 +33,20 @@ class SmartContractExecutionFD extends Component {
     })
   }
 
-  signTransaction = async () => {
-    const { from, to, amount, contractAddress, gas } = this.state
-
-    const data = caver.klay.abi.encodeFunctionCall({
-      name: 'transfer',
-      type: 'function',
-      inputs: [{
-        type: 'address',
-        name: 'recipient',
-      }, {
-        type: 'uint256',
-        name: 'amount',
-      }],
-    }, [to, caver.utils.toPeb(amount, 'KLAY')])
+  handleSignTransaction = async () => {
+    const { from, to, value, memo, gas, ratio } = this.state
 
     const txData = {
-      type: 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION',
+      type: 'FEE_DELEGATED_VALUE_TRANSFER_MEMO_WITH_RATIO',
       from,
-      to: contractAddress,
+      to,
       gas,
-      data,
+      value: caver.utils.toPeb(value, 'KLAY'),
+      data: memo,
+      feeRatio: ratio,
     }
 
-    const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
+    const { rawTransaction: senderRawTransaction} = await caver.klay.signTransaction(txData)
 
     this.setState({
       senderAddress: from,
@@ -65,14 +55,15 @@ class SmartContractExecutionFD extends Component {
   }
 
   render() {
-    const { from, to, amount, contractAddress, gas, senderRawTransaction } = this.state
+    const { from, to, value, memo, ratio, gas, senderAddress, senderRawTransaction } = this.state
 
     return (
-      <div className="SmartContractExecutionFD">
+      <div className="ValueTransferMemoFDRatio">
+        <h3>Sender</h3>
         <Input
           name="from"
-          label="From (Sender Address)"
-          value={from}
+          label="From"
+          value={senderAddress || from}
           placeholder="From Address"
           onChange={this.handleChange}
         />
@@ -81,32 +72,39 @@ class SmartContractExecutionFD extends Component {
           label="To"
           value={to}
           onChange={this.handleChange}
-          placeholder="Address you want to send Token"
+          placeholder="To Address"
         />
         <Input
-          name="contractAddress"
-          label="Contract Address (Token Address)"
-          value={contractAddress}
+          name="value"
+          label="Value"
+          value={value}
           onChange={this.handleChange}
-          placeholder="The address of the deployed smart contract"
+          placeholder="Value (KLAY)"
         />
         <Input
-          name="amount"
-          label="Amount"
-          value={amount}
+          name="memo"
+          label="Memo"
+          value={memo}
           onChange={this.handleChange}
-          placeholder="Amount of Eth you want to send"
+          placeholder="Memo"
+        />
+        <Input
+          name="ratio"
+          label="Fee Ratio"
+          value={ratio}
+          onChange={this.handleChange}
+          placeholder="Fee Ratio (%)"
         />
         <Input
           name="gas"
           label="Gas"
           value={gas}
           onChange={this.handleChange}
-          placeholder="Gas"
+          placeholder="Gas (Peb)"
         />
         <Button
           title="Sign Transaction"
-          onClick={this.signTransaction}
+          onClick={this.handleSignTransaction}
         />
         {senderRawTransaction && (
           <Message
@@ -123,4 +121,4 @@ class SmartContractExecutionFD extends Component {
   }
 }
 
-export default SmartContractExecutionFD
+export default ValueTransferMemoFDRatio

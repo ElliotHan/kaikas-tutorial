@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
-
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
-
-import './SmartContractExecution.scss'
 
 class SmartContractExecutionLegacy extends Component {
   constructor(props) {
@@ -35,9 +32,8 @@ class SmartContractExecutionLegacy extends Component {
     })
   }
 
-  handleSmartContractExecution = () => {
+  signTransaction = () => {
     const { from, contractAddress, to, amount, gas } = this.state
-    const caver = new Caver(klaytn)
     const data = caver.klay.abi.encodeFunctionCall({
       name: 'transfer',
       type: 'function',
@@ -70,23 +66,11 @@ class SmartContractExecutionLegacy extends Component {
       })
   }
 
-  /* callContractFunction = () => {
-    const { method } = this.state
-    const getData = myContract[method].getData();
-    web3.eth.call({ to: Contractaddress, data: getData }, (err, result) => {
-      console.log(err, result)
-    })
-  } */
-
   render() {
     const { from, to, amount, contractAddress, gas, txHash, receipt, error } = this.state
+
     return (
       <div className="SmartContractExecution">
-        <p className="SmartContractExecution__guide">
-          * Ryan token: 0x453b77027874071b9f85742052006db4c97e9278
-          <br />
-          * Apeach token: 0x1543cd6bf3097ba0b5a6d8c6f0c74ae7564bfcdb
-        </p>
         <Input
           name="from"
           label="From"
@@ -123,8 +107,8 @@ class SmartContractExecutionLegacy extends Component {
           placeholder="Gas"
         />
         <Button
-          title="Contract Execute"
-          onClick={this.handleSmartContractExecution}
+          title="Sign Transaction"
+          onClick={this.signTransaction}
         />
         <TxResult
           txHash={txHash}

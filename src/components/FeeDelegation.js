@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react'
 import Caver from 'caver-js'
-import { isNull } from 'lodash';
-import Input from 'components/Input';
-import Button from 'components/Button';
-import TxResult from 'components/TxResult';
+import Input from 'components/Input'
+import Button from 'components/Button'
+import TxResult from 'components/TxResult'
+
 import './FeeDelegation.scss'
 
 class FeeDelegation extends PureComponent {
@@ -11,31 +11,28 @@ class FeeDelegation extends PureComponent {
     super(props)
     this.state = {
       feePayerAddress: props.feePayerAddress,
-      feePayerPrivateKey: '',
       txHash: null,
       receipt: null,
       error: null,
     }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   if (nextProps.feePayerAddress !== prevState.feePayerAddress) {
-  //     return { feePayerAddress: nextProps.feePayerAddress }
-  //   }
-  //   return null
-  // }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.feePayerAddress !== prevState.feePayerAddress) {
+      return { feePayerAddress: nextProps.feePayerAddress }
+    }
+    return null
+  }
 
   handleChange = (e) => {
-    console.warn('e', e.target.value)
     this.setState({
       [e.target.name]: e.target.value,
     })
   }
 
   sendTransaction = () => {
-    const { feePayerAddress, feePayerPrivateKey } = this.state
+    const { feePayerAddress } = this.state
     const caver = new Caver(window.klaytn)
-    console.log('senderRawTransaction', this.props.senderRawTransaction)
     caver.klay.sendTransaction({
       senderRawTransaction: this.props.senderRawTransaction,
       feePayer: feePayerAddress,
@@ -58,7 +55,7 @@ class FeeDelegation extends PureComponent {
     const { feePayerAddress, txHash, receipt, error } = this.state
     return (
       <div className="FeeDelegation">
-        <h3 className="FeeDelegation__title">Fee Payer</h3>
+        <h3>Fee Payer</h3>
         <Input
           name="feePayerAddress"
           label="Fee Payer Address"
@@ -66,13 +63,6 @@ class FeeDelegation extends PureComponent {
           onChange={this.handleChange}
           placeholder="Fee Payer Address"
         />
-        {/* <Input
-          name="feePayerPrivateKey"
-          label="Fee Payer PrivateKey"
-          value={feePayerPrivateKey}
-          onChange={this.handleChange}
-          placeholder="Fee Payer PrivateKey"
-        /> */}
         <Button
           title="Send Transaction"
           onClick={this.sendTransaction}

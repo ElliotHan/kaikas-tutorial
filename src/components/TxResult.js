@@ -6,7 +6,7 @@ import './TxResult.scss'
 
 const TxResult = ({ className, txHash, receipt, error }) => (
   <div className={cx('TxResult', className)}>
-    <h3 className="TxResult__title">Transaction Result</h3>
+    <h3>Transaction Result</h3>
     {txHash && (
       <Message
         message={txHash}

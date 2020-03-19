@@ -1,26 +1,29 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
+import caver from 'klaytn/caver'
 
 import Nav from 'components/Nav'
 import WalletInfo from 'components/WalletInfo'
 import Dropdown from 'components/Dropdown'
-import ValueTransfer from 'components/ValueTransfer'
 import ValueTransferLegacy from 'components/ValueTransferLegacy'
+import SmartContractExecutionLegacy from 'components/SmartContractExecutionLegacy'
 import SmartContractDeployLegacy from 'components/SmartContractDeployLegacy'
+import AddToken from 'components/AddToken'
+import SignMessage from 'components/SignMessage'
+import ValueTransfer from 'components/ValueTransfer'
+import ValueTransferFD from 'components/ValueTransferFD'
+import ValueTransferFDRatio from 'components/ValueTransferFDRatio'
+import ValueTransferMemo from 'components/ValueTransferMemo'
+import ValueTransferMemoFD from 'components/ValueTransferMemoFD'
+import ValueTransferMemoFDRatio from 'components/ValueTransferMemoFDRatio'
+import AccountUpdate from 'components/AccountUpdate'
+import AccountUpdateFD from 'components/AccountUpdateFD'
+import AccountUpdateFDRatio from 'components/AccountUpdateFDRatio'
 import SmartContractDeploy from 'components/SmartContractDeploy'
 import SmartContractDeployFD from 'components/SmartContractDeployFD'
-import AddToken from 'components/AddToken'
-import SmartContractExecutionLegacy from 'components/SmartContractExecutionLegacy'
+import SmartContractDeployFDRatio from 'components/SmartContractDeployFDRatio'
 import SmartContractExecution from 'components/SmartContractExecution'
-import ValueTransferFD from 'components/ValueTransferFD'
-import ValueTransferFDR from 'components/ValueTransferFDR'
 import SmartContractExecutionFD from 'components/SmartContractExecutionFD'
-import AccountUpdate from 'components/AccountUpdate'
-import SignTransaction from 'components/SignTransaction'
-import SendSignedTransaction from 'components/SendSignedTransaction'
-import Cancel from 'components/Cancel'
-import CancelFD from 'components/CancelFD'
-import SignMessage from 'components/SignMessage'
+import SmartContractExecutionFDRatio from 'components/SmartContractExecutionFDRatio'
 
 import './KaikasPage.scss'
 
@@ -30,8 +33,6 @@ const txTypeList = [
   'Token Transfer (Legacy)',
   'Add Token',
   'Sign Message',
-  // 'Sign Transaction',
-  // 'Send Signed Transaction',
   'Value Transfer',
   'Value Transfer (Fee Delegation)',
   'Value Transfer (Fee Delegation with Ratio)',
@@ -47,23 +48,11 @@ const txTypeList = [
   'Token Transfer',
   'Token Transfer (Fee Delegation)',
   'Token Transfer (Fee Delegation with Ratio)',
-  // 'Cancel',
-  // 'Cancel (Fee Delegation)',
-  // 'Cancel (Fee Delegation with Ratio)',
-  // 'Contract Example: Count App',
 ]
 
-
-// Request to publicEN
-window.caver2 = new Caver('https://api.baobab.klaytn.net:8651/')
-// Request to Kaikas
-window.caver3 = new Caver(window.klaytn)
-
-caver2.klay.accounts.wallet.add('0x69c39db1ada4dc95e6cdd80e8fc7a76a34de07db650502d4ec3e373af80243d30x000x0a27b3c3e8ff6d01ca63fa44ac8c7eab9a3db187')
 class KaikasPage extends Component {
   constructor(props) {
     super(props)
-    this.caver = null
     this.state = {
       txType: null,
       account: '',
@@ -77,19 +66,22 @@ class KaikasPage extends Component {
     this.setNetworkInfo()
   }
 
-  setAccountInfo = async (provider) => {
-    const account = provider.selectedAddress
-    const balance = await this.caver.klay.getBalance(account)
+  setAccountInfo = async () => {
+    const { klaytn } = window
+    if (klaytn === undefined) return
+
+    const account = klaytn.selectedAddress
+    const balance = await caver.klay.getBalance(account)
     this.setState({
       account,
-      balance: this.caver.utils.fromPeb(balance, 'KLAY'),
+      balance: caver.utils.fromPeb(balance, 'KLAY'),
     })
+    klaytn.on('accountsChanged', () => this.setAccountInfo())
   }
 
-  // TODO: Internet no connection
   setNetworkInfo = () => {
     const { klaytn } = window
-    if(klaytn === undefined) return
+    if (klaytn === undefined) return
 
     this.setState({ network: klaytn.networkVersion })
     klaytn.on('networkChanged', () => this.setNetworkInfo(klaytn.networkVersion))
@@ -98,25 +90,15 @@ class KaikasPage extends Component {
   loadAccountInfo = async () => {
     const { klaytn } = window
 
-    // 1. Modern dapp browsers...
     if (klaytn) {
-      this.caver = new Caver(klaytn)
       try {
         await klaytn.enable()
         this.setAccountInfo(klaytn)
-        klaytn.on('accountsChanged', () => this.setAccountInfo(klaytn))
       } catch (error) {
         console.log('User denied account access')
       }
-    }
-    // 2. Legacy dapp browsers...
-    else if (window.caver) {
-      this.caver = new Caver(window.caver.currentProvider)
-      this.setAccountInfo(this.caver)
-    }
-    // 3. Non-dapp browsers...
-    else {
-      console.log('Non-Klaytn browser detected. You should consider trying MetaMask!')
+    } else {
+      console.log('Non-Kaikas browser detected. You should consider trying Kaikas!')
     }
   }
 
@@ -132,50 +114,38 @@ class KaikasPage extends Component {
         return <SmartContractExecutionLegacy from={from} />
       case 'Add Token':
           return <AddToken />
-      // case 'Sign Transaction':
-      //     return <SignTransaction from={from} />
-      // case 'Send Signed Transaction':
-      //     return <SendSignedTransaction />
       case 'Sign Message':
           return <SignMessage from={from} />
-      // case 'Cancel':
-      //     return <Cancel from={from} />
-      // case 'Cancel (Fee Delegation)':
-      //     return <CancelFD from={from} />
-      // case 'Cancel (Fee Delegation with Ratio)':
-      //     return <CancelFD from={from} feeRatio/>
       case 'Value Transfer':
         return <ValueTransfer from={from} />
       case 'Value Transfer (Fee Delegation)':
         return <ValueTransferFD from={from} />
       case 'Value Transfer (Fee Delegation with Ratio)':
-        return <ValueTransferFDR from={from} />
+        return <ValueTransferFDRatio from={from} />
       case 'Value Transfer with Memo':
-        return <ValueTransfer from={from} isMemo />
+        return <ValueTransferMemo from={from} />
       case 'Value Transfer with Memo (Fee Delegation)':
-        return <ValueTransferFD from={from} isMemo />
+        return <ValueTransferMemoFD from={from} />
       case 'Value Transfer with Memo (Fee Delegation with Ratio)':
-        return <ValueTransferFDR from={from} isMemo />
+        return <ValueTransferMemoFDRatio from={from} />
       case 'Smart Contract Deploy':
         return <SmartContractDeploy from={from} />
       case 'Smart Contract Deploy (Fee Delegation)':
         return <SmartContractDeployFD from={from} />
       case 'Smart Contract Deploy (Fee Delegation with Ratio)':
-        return <SmartContractDeployFD from={from} feeRatio />
+        return <SmartContractDeployFDRatio from={from} />
       case 'Token Transfer':
         return <SmartContractExecution from={from} />
       case 'Token Transfer (Fee Delegation)':
         return <SmartContractExecutionFD from={from} />
       case 'Token Transfer (Fee Delegation with Ratio)':
-        return <SmartContractExecutionFD from={from} feeRatio />
+        return <SmartContractExecutionFDRatio from={from} />
       case 'Account Update':
           return <AccountUpdate from={from} />
       case 'Account Update (Fee Delegation)':
-          return <AccountUpdate from={from} isFeeDelegation />
+          return <AccountUpdateFD from={from} />
       case 'Account Update (Fee Delegation with Ratio)':
-          return <AccountUpdate from={from} isFeeDelegation feeRatio />
-      // case 'Contract Example: Count App':
-      //   return 'Count App Example'
+          return <AccountUpdateFDRatio from={from} />
       default:
         return (<p className="KaikasPage__guide">Select a Transaction example :D</p>)
     }
@@ -191,7 +161,7 @@ class KaikasPage extends Component {
           <div className="KaikasPage__content">
             <Dropdown
               className="KaikasPage__dropdown"
-              placeholder="Transaction type"
+              placeholder="Transaction Type"
               selectedItem={txType}
               handleSelect={this.selectTxType}
               list={txTypeList}

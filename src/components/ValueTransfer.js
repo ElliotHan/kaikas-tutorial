@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import Caver from 'caver-js'
-
+import caver from 'klaytn/caver'
 import Input from 'components/Input'
 import Button from 'components/Button'
 import TxResult from 'components/TxResult'
-
-import './ValueTransfer.scss'
 
 class ValueTransfer extends Component {
   constructor(props) {
@@ -14,8 +11,7 @@ class ValueTransfer extends Component {
       from: props.from,
       to: '',
       value: '',
-      memo: '',
-      gas: '3000000',
+      gas: 3000000,
       txHash: null,
       receipt: null,
       error: null,
@@ -36,19 +32,15 @@ class ValueTransfer extends Component {
     })
   }
 
-  handleValueTransfer = () => {
-    const caver = new Caver(klaytn)
-    const { from, to, value, memo, gas } = this.state
-
-    const dataMemo = memo === '' ? {} : { data: memo }
+  signTransaction = () => {
+    const { from, to, value, gas } = this.state
 
     caver.klay.sendTransaction({
-      type: this.props.isMemo ? 'VALUE_TRANSFER_MEMO' : 'VALUE_TRANSFER',
+      type: 'VALUE_TRANSFER',
       from,
       to,
       value: caver.utils.toPeb(value.toString(), 'KLAY'),
       gas,
-      ...dataMemo,
     })
       .once('transactionHash', (transactionHash) => {
         console.log('txHash', transactionHash)
@@ -65,8 +57,8 @@ class ValueTransfer extends Component {
   }
   
   render() {
-    const { isFeeDelegation, rawTransaction } = this.props
-    const { from, to, value, gas, memo, txHash, receipt, error } = this.state
+    const { from, to, value, gas, txHash, receipt, error } = this.state
+
     return (
       <div className="ValueTransfer">
         <Input
@@ -90,15 +82,6 @@ class ValueTransfer extends Component {
           onChange={this.handleChange}
           placeholder="Value (KLAY)"
         />
-        {this.props.isMemo && (
-          <Input
-            name="memo"
-            label="Memo"
-            value={memo}
-            onChange={this.handleChange}
-            placeholder="Memo"
-          />
-        )}
         <Input
           name="gas"
           label="Gas"
@@ -107,23 +90,14 @@ class ValueTransfer extends Component {
           placeholder="Gas (Peb)"
         />
         <Button
-          title={isFeeDelegation ? 'Sign Transaction' : 'Send KLAY'}
-          onClick={this.handleValueTransfer}
-          // onClick={isFeeDelegation ? this.signTransaction : this.handleValueTransfer}
+          title="Sign Transaction"
+          onClick={this.signTransaction}
         />
-        {rawTransaction && (
-          <Message
-            type="rawTransaction"
-            message={JSON.stringify(rawTransaction)}
-          />
-        )}
-        {!isFeeDelegation && (
-          <TxResult
-            txHash={txHash}
-            receipt={receipt}
-            error={error}
-          />
-        )}
+        <TxResult
+          txHash={txHash}
+          receipt={receipt}
+          error={error}
+        />
       </div>
     )
   }

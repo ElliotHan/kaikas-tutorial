@@ -1,101 +1,44 @@
 .Message {
   @include font-style('font-4');
-  word-break: break-all;
-  padding: 10px 24px;
-  overflow: scroll;
-  background-color: $main-theme-deep-black;
-  padding: 10px;
-  padding-left: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 10px 0;
+  margin-bottom: 10px;
   border-radius: 5px;
+  background-color: $black;
+  word-break: break-all;
   color: white;
-  margin-bottom: 20px;
-  
-  // TODO: remove duplicated code
+
   &--error {
     .Message__status {
-      vertical-align: middle;
-      padding-top: 20px;
-      color: $error-red;
+      color: $alert-red;
       background-image: url('/images/ico-error.svg');
-      background-repeat: no-repeat;
-      background-position: top center;
     }
-    .Message__message {
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 14px;
-      color: $error-red;
-          width: calc(100% - 80px);
-    }
+    .Message__message { color: $alert-red; }
   }
+
   &--txHash {
     .Message__status {
-      vertical-align: middle;
       padding-top: 0;
       color: $warning-yellow;
-      background: none;
-    }
-    .Message__message {
-      color: $warning-yellow;
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 14px;
-      color: white;
-          width: calc(100% - 80px);
+      background-image: none;
+      .Message__message { color: $warning-yellow; }
     }
   }
+
   &--receipt {
     .Message__status {
-      vertical-align: top;
-      margin-top: 5px;
-      padding-top: 20px;
-      color: white;
       background-image: url('/images/ico-receipt.svg');
-      background-repeat: no-repeat;
-      background-position: top center;
-    }
-    .Message__message {
-      width: calc(100% - 80px);
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 14px;
-      color: white;
     }
   }
-  &--rawTransaction {
-    margin-bottom: 0;
-    margin-top: 10px;
-    .Message__status {
-      vertical-align: top;
-      padding-top: 30px;
-      color: white;
-      background: top center / 25px no-repeat url('/images/icon-tx.svg');
-      line-height: 1.1;
-    }
-    .Message__message {
-      width: calc(100% - 80px);
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 14px;
-      color: white;
-    }
-  }
+
+  &--rawTransaction,
   &--signedMessage {
-    margin-bottom: 0;
-    margin-top: 10px;
+    margin-top: 20px;
     .Message__status {
-      vertical-align: top;
-      padding-top: 30px;
-      color: white;
-      background: top center / 25px no-repeat url('/images/icon-tx.svg');
-      line-height: 1.1;
-    }
-    .Message__message {
-      width: calc(100% - 80px);
-      vertical-align: middle;
-      display: inline-block;
-      font-size: 14px;
-      color: white;
+      padding-top: 25px;
+      background-size: 22px 22px;
+      background-image: url('/images/icon-tx.svg');
     }
   }
 }
@@ -103,12 +46,21 @@
 .Message__status {
   display: inline-block;
   width: 80px;
+  padding-top: 18px;
+  line-height: 1.1;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 14px 14px;
   text-align: center;
   font-weight: bold;
+  color: white;
 }
 
 .Message__message {
   display: inline-block;
   width: calc(100% - 80px);
-  vertical-align: middle;
+  max-height: 150px;
+  overflow: scroll;
+  font-size: 14px;
+  color: white;
 }

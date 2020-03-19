@@ -42,12 +42,13 @@
 .WalletInfo__balance {
   @include textEllipsis();
   display: inline-block;
-  max-width: calc(100% - 34px);
+  max-width: calc(100% - 35px);
   vertical-align: bottom;
 }
 
 .WalletInfo__unit {
   display: inline-block;
+  width: 35px;
   padding-left: 5px;
   text-align: right;
 }

@@ -1,4 +1,5 @@
 $alert-red: rgb(245,65,55);         // #f54137
+$warning-yellow: rgb(245,166,10);   // #f5a60a
 $bg-color: rgb(250,250,250);        // #fafafa
 $border-grey: rgb(234,234,234);     // #eaeaea
 $light-grey: rgb(225,225,225);      // #e1e1e1
@@ -6,35 +7,5 @@ $middle-grey: rgb(204,204,204);     // #cccccc
 $brown-grey: rgb(153,153,153);      // #999999
 $brownish-grey: rgb(112,112,112);   // #707070
 $dark-brown: rgb(79,71,62);         // #4f473e
-$black: rgb(44,44,44);              // #2c2c2c
+$black: rgb(19,20,31);              // #13141F
 $white: rgb(255,255,255);           // #ffffff
-
-
-// Forest Tycoon
-$black: #000000;
-$white: #FFFFFF;
-
-$main-theme-deep-black: #13141F;
-$main-theme-deep-navy: #191a29;
-$main-theme-blue: #2f3998;
-$main-theme-blue-pressed: rgba($main-theme-blue, .5);
-
-$main-theme-steel-gray: #1f2133;
-$main-theme-light-gray: #9699b2;
-$main-theme-sky-blue: #579cd6;
-$main-theme-red: #cc4b14;
-$editor-linenumber: #4f515e;
-
-$error-red: rgba(#f5500a, 0.8);
-$warning-yellow: rgba(#f5a60a, .8);
-
-$box-header-active: #25283d;
-$box-header-hover: #2b2f47;
-$box-header-pressed: #1f2133;
-$function-send-button: #429bb8;
-
-
-$clay: #25283d;
-
-$editor-tab-active: #2B2F47;
-$editor-tab-hover: #2B2F47;

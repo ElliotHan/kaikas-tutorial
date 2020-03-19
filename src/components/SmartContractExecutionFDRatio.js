@@ -6,7 +6,7 @@ import Message from 'components/Message'
 import FeeDelegation from 'components/FeeDelegation'
 
 
-class SmartContractExecutionFD extends Component {
+class SmartContractExecutionFDRatio extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,18 +14,19 @@ class SmartContractExecutionFD extends Component {
       to: '',
       amount: '',
       contractAddress: '',
+      ratio: '',
       gas: 3000000,
       senderAddress: '',
       senderRawTransaction: null,
     }
   }
 
-  // static getDerivedStateFromProps = (nextProps, prevState) => {
-  //   if (nextProps.from !== prevState.from) {
-  //     return { from: nextProps.from }
-  //   }
-  //   return null
-  // }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.from !== prevState.from) {
+      return { from: nextProps.from }
+    }
+    return null
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -34,7 +35,7 @@ class SmartContractExecutionFD extends Component {
   }
 
   signTransaction = async () => {
-    const { from, to, amount, contractAddress, gas } = this.state
+    const { from, to, amount, contractAddress, ratio, gas } = this.state
 
     const data = caver.klay.abi.encodeFunctionCall({
       name: 'transfer',
@@ -49,11 +50,12 @@ class SmartContractExecutionFD extends Component {
     }, [to, caver.utils.toPeb(amount, 'KLAY')])
 
     const txData = {
-      type: 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION',
+      type: 'FEE_DELEGATED_SMART_CONTRACT_EXECUTION_WITH_RATIO',
       from,
       to: contractAddress,
-      gas,
       data,
+      feeRatio: ratio,
+      gas,
     }
 
     const { rawTransaction: senderRawTransaction } = await caver.klay.signTransaction(txData)
@@ -65,10 +67,10 @@ class SmartContractExecutionFD extends Component {
   }
 
   render() {
-    const { from, to, amount, contractAddress, gas, senderRawTransaction } = this.state
+    const { from, to, amount, contractAddress, gas, ratio, senderRawTransaction } = this.state
 
     return (
-      <div className="SmartContractExecutionFD">
+      <div className="SmartContractExecutionFDRatio">
         <Input
           name="from"
           label="From (Sender Address)"
@@ -98,6 +100,13 @@ class SmartContractExecutionFD extends Component {
           placeholder="Amount of Eth you want to send"
         />
         <Input
+          name="ratio"
+          label="Fee Ratio"
+          value={ratio}
+          onChange={this.handleChange}
+          placeholder="Fee Ratio (%)"
+        />
+        <Input
           name="gas"
           label="Gas"
           value={gas}
@@ -123,4 +132,4 @@ class SmartContractExecutionFD extends Component {
   }
 }
 
-export default SmartContractExecutionFD
+export default SmartContractExecutionFDRatio

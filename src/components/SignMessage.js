@@ -3,8 +3,6 @@ import Input from 'components/Input'
 import Button from 'components/Button'
 import Message from 'components/Message'
 
-import './SignMessage.scss'
-
 class SignMessage extends Component {
   constructor(props) {
     super(props)
